@@ -1,0 +1,10 @@
+myel:
+  baseUrl: 'https://certi-my.essilorluxottica.com'
+  sessionUrl: '/fo-bff/admin/current-session'
+  personificationUrl: '/fo-bff/api/priv/v1/{storeIdentifier}/{locale}/personification/customers'
+  precart: '/fo-bff/api/priv/v1/{storeIdentifier}/{locale}/precart'
+labels:
+    endpoint: 'https://api-hub-prod.luxottica.com/translations/getPrivateTranslations?project=MYEL - Front Office&isExtended=false&language={locale}'
+    header:
+      key: 'Ocp-Apim-Subscription-Key'
+      value: '52341fb04f5b493caebe08689b6750d7'

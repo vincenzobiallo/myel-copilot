@@ -20,13 +20,6 @@ public class Config {
     @Value("${myel.precart}")
     private String precart;
 
-    @Value("${labels.endpoint}")
-    private String labelsEndpoint;
-    @Value("${labels.header.key}")
-    private String labelsHeaderKey;
-    @Value("${labels.header.value}")
-    private String labelsHeaderValue;
-
     @Bean
     public static InjectionUtil injectionUtil() {
         return new InjectionUtil();

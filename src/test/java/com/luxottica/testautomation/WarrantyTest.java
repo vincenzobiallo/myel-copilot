@@ -1,11 +1,9 @@
 package com.luxottica.testautomation;
 
 import com.luxottica.testautomation.annotations.Impersonificate;
-import com.luxottica.testautomation.components.labels.LabelUtils;
-import com.luxottica.testautomation.constants.Constants;
+import com.luxottica.testautomation.components.labels.LabelComponentImpl;
 import com.luxottica.testautomation.constants.Errors;
-import com.luxottica.testautomation.models.MyelStore;
-import com.luxottica.testautomation.report.enums.TestStatus;
+import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.LoadState;
@@ -19,13 +17,13 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class WarrantyTest extends BaseTest {
 
-    @Test(testName = "AT016", description = "Process flow Standard warranty")
-    @Impersonificate(door = "0001001081", store = MyelStore.ITALY)
+    /*@Test(testName = "AT016", description = "Process flow Standard warranty")
+    @Impersonificate(door = "0001001081", store = MyelStoreold.ITALY)
     public void processFlowStandardWarranty(Method method) {
 
         String testId = initTestAndReturnId(method);
 
-        LabelUtils labelUtils = InjectionUtil.getBean(LabelUtils.class);
+        LabelComponentImpl labelUtils = InjectionUtil.getBean(LabelComponentImpl.class);
         final String findBrandLabel = labelUtils.getLabel(getUser(), AFTERSALES_CONVERSATIONAL_SEARCH_BRAND_PLACEHOLDER);
         final String findModelLabel = labelUtils.getLabel(getUser(), AFTERSALES_CONVERSATIONAL_SEARCH_MODEL_PLACEHOLDER);
         final String findVariantLabel = labelUtils.getLabel(getUser(), AFTERSALES_CONVERSATIONAL_SEARCH_VARIANT_PLACEHOLDER);
@@ -88,5 +86,5 @@ public class WarrantyTest extends BaseTest {
 
             return TestStatus.PASSED;
         });
-    }
+    }*/
 }

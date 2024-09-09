@@ -10,7 +10,7 @@ public class Errors {
         return errorKey;
     }
 
-    public static final String COOKIE_BANNER_NOT_FOUND = getError("Cookie banner is not visible.");
+    public static final String COOKIE_BANNER_NOT_FOUND = getError("");
     public static final String ELEMENTS_NOT_VISIBLE = getError("One or more element(s) are not visible in page!");
     public static final String VIEW_ALL_NOT_VISIBLE = getError("'View All' button is not visible!");
     public static final String PRICE_POLICY_NOT_FOUND = getError("Price policy not found!");

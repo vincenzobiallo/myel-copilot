@@ -1,6 +1,6 @@
-package com.luxottica.testautomation.report.models;
+package com.luxottica.testautomation.components.report.models;
 
-import com.luxottica.testautomation.report.enums.TestStatus;
+import com.luxottica.testautomation.components.report.enums.TestStatus;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 

@@ -1,6 +1,6 @@
 package com.luxottica.testautomation.exceptions;
 
-import com.luxottica.testautomation.report.enums.TestStatus;
+import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.microsoft.playwright.PlaywrightException;
 import lombok.Getter;
 

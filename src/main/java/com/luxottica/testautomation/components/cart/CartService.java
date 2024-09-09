@@ -6,7 +6,6 @@ import com.google.gson.JsonParser;
 import com.luxottica.testautomation.components.cart.dto.CartContentDTO;
 import com.luxottica.testautomation.components.cart.dto.CartDTO;
 import com.luxottica.testautomation.configuration.Config;
-import com.luxottica.testautomation.models.MyelStore;
 import com.luxottica.testautomation.models.User;
 import com.luxottica.testautomation.utils.RequestUtils;
 import com.microsoft.playwright.APIRequestContext;

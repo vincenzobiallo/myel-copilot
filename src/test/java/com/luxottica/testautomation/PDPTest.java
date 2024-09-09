@@ -3,8 +3,8 @@ package com.luxottica.testautomation;
 import com.luxottica.testautomation.annotations.Impersonificate;
 import com.luxottica.testautomation.components.cart.CartService;
 import com.luxottica.testautomation.components.cart.dto.CartDTO;
-import com.luxottica.testautomation.models.MyelStore;
-import com.luxottica.testautomation.report.enums.TestStatus;
+import com.luxottica.testautomation.components.report.enums.TestStatus;
+import com.luxottica.testautomation.security.Context;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.luxottica.testautomation.utils.PlaywrightTestUtils;
 import com.microsoft.playwright.Locator;
@@ -20,7 +20,7 @@ import static org.testng.AssertJUnit.assertTrue;
 public class PDPTest extends BaseTest {
 
     @Test(testName = "AT015", description = "Check Sunglasses PDP and add to cart")
-    @Impersonificate(door = "0001001081", store = MyelStore.ITALY)
+    //@Impersonificate(door = "0001001081", store = MyelStoreold.ITALY)
     public void checkSunglassesPDP(Method method) {
 
         String testId = initTestAndReturnId(method);
@@ -63,7 +63,7 @@ public class PDPTest extends BaseTest {
         // Check if the product is in the cart in the sunglasses category
         executeStep(4, testId, () -> {
             CartService cartService = InjectionUtil.getBean(CartService.class);
-            CartDTO cart = cartService.getCart(PlaywrightTestUtils.getPlaywright().get(), getUser());
+            CartDTO cart = cartService.getCart(Context.getPlaywright(), getUser());
 
             assertTrue(cart.getContent().get(CATEGORY).stream().anyMatch(content -> content.getUpc().equals(upcValue.get())));
             return TestStatus.PASSED;

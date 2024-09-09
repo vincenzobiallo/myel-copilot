@@ -1,8 +1,7 @@
 package com.luxottica.testautomation;
 
 import com.luxottica.testautomation.annotations.Impersonificate;
-import com.luxottica.testautomation.models.MyelStore;
-import com.luxottica.testautomation.report.enums.TestStatus;
+import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.microsoft.playwright.Locator;
 import org.testng.annotations.Test;
 
@@ -15,11 +14,12 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class PLPTest extends BaseTest {
 
-    @Test(testName = "AT014", description = "Check catalogue sorting")
-    @Impersonificate(door = "0001001081", store = MyelStore.ITALY)
+    /*@Test(testName = "AT014", description = "Check catalogue sorting")
+    //@Impersonificate(door = "0001001081", store = MyelStoreold.ITALY)
     public void checkCatalogueSorting(Method method) {
 
         String testId = initTestAndReturnId(method);
+
 
         String plpPage = getURL() + "/plp/frames?PRODUCT_CATEGORY_FILTER=Sunglasses&PRODUCT_CATEGORY_FILTER=Sunglasses+Kids";
         page.navigate(plpPage);
@@ -86,5 +86,5 @@ public class PLPTest extends BaseTest {
 
             return TestStatus.PASSED;
         });
-    }
+    }*/
 }

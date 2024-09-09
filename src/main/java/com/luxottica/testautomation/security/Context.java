@@ -1,5 +1,6 @@
-package com.luxottica.testautomation.utils;
+package com.luxottica.testautomation.security;
 
+import com.luxottica.testautomation.exceptions.ContextMissingValueException;
 import com.luxottica.testautomation.models.User;
 import com.microsoft.playwright.Playwright;
 
@@ -9,6 +10,11 @@ public class Context {
     private static final ThreadLocal<User> user = new ThreadLocal<>();
 
     public static Playwright getPlaywright() {
+
+        if (playwright.get() == null) {
+            throw new ContextMissingValueException("Playwright is not set");
+        }
+
         return playwright.get();
     }
 
@@ -17,6 +23,11 @@ public class Context {
     }
 
     public static User getUser() {
+
+        if (user.get() == null) {
+            throw new ContextMissingValueException("User is not set");
+        }
+
         return user.get();
     }
 

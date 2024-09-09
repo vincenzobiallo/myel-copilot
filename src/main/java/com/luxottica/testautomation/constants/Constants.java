@@ -14,6 +14,7 @@ public class Constants {
         public static final String HEADER_VALUE = "labels.header.value";
 
         public static final String COOKIE_POLICY_BANNER_MESSAGE = "COOKIE_POLICY_BANNER_MESSAGE";
+        public static final String COOKIE_POLICY_BANNER_REFUSE = "COOKIE_POLICY_BANNER_REFUSE";
         public static final String SRP_DISCLAIMER_DESCRIPTION = "SRP_DISCLAIMER_DESCRIPTION";
         public static final String ALL_PRICES = "ALL_PRICES";
         public static final String PLP_SORT_BY_ALPHABETICAL = "PLP_SORT_BY_ALPHABETICAL";

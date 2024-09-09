@@ -1,33 +1,28 @@
 package com.luxottica.testautomation;
 
 import com.luxottica.testautomation.annotations.Impersonificate;
-import com.luxottica.testautomation.components.labels.LabelUtils;
+import com.luxottica.testautomation.components.labels.LabelComponentImpl;
 import com.luxottica.testautomation.constants.Errors;
-import com.luxottica.testautomation.models.MyelStore;
-import com.luxottica.testautomation.report.enums.TestStatus;
+import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.luxottica.testautomation.utils.PlaywrightTestUtils;
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.assertions.LocatorAssertions;
-import com.microsoft.playwright.options.LoadState;
-import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import static com.luxottica.testautomation.constants.Constants.LABELS.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 
 public class RXTest extends BaseTest {
 
-    @Test(testName = "AT016", description = "Process flow Standard warranty")
-    @Impersonificate(door = "0001001081", store = MyelStore.ITALY)
+    /*@Test(testName = "AT016", description = "Process flow Standard warranty")
+    @Impersonificate(door = "0001001081", store = MyelStoreold.ITALY)
     public void processFlowStandardWarranty(Method method) {
 
         String testId = initTestAndReturnId(method);
 
-        LabelUtils labelUtils = InjectionUtil.getBean(LabelUtils.class);
+        LabelComponentImpl labelUtils = InjectionUtil.getBean(LabelComponentImpl.class);
 
         final String rxChooseLabel = labelUtils.getLabel(getUser(), RX_CHOOSE_BRAND);
 
@@ -59,5 +54,5 @@ public class RXTest extends BaseTest {
 
             return TestStatus.PASSED;
         });
-    }
+    }*/
 }

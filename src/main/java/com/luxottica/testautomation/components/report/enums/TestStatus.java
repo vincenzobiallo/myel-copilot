@@ -1,4 +1,4 @@
-package com.luxottica.testautomation.report.enums;
+package com.luxottica.testautomation.components.report.enums;
 
 import lombok.Getter;
 

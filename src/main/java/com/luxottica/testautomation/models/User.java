@@ -108,43 +108,5 @@ public class User {
         context.close();
     }
 
-    public void vanish(Impersonificate impersonification) {
 
-        if (!isBackOfficeUser) {
-            throw new BackOfficeUserException(String.format("User %s is not a backoffice user!", username));
-        }
-
-        Config config = InjectionUtil.getBean(Config.class);
-
-        String url = config.getBaseUrl().concat(config.getPersonificationUrl());
-        APIRequestContext context = RequestUtils.buildContext(PlaywrightTestUtils.getPlaywright().get(), username);
-
-        String userToImpersonificate = impersonification.door().trim();
-        MyelStore storeToImpersonificate = impersonification.store();
-
-        String urlGet = url.replace("{storeIdentifier}", getStore()).replace("{locale}", getLocale());
-        urlGet = urlGet.concat(String.format("?storeSelected=%s&searchCustomer=%s", storeToImpersonificate.getStoreCode(), userToImpersonificate));
-
-        APIResponse responseGet = context.get(urlGet);
-        JsonObject responseBody = JsonParser.parseString(new String(responseGet.body())).getAsJsonObject();
-        JsonArray data = responseBody.getAsJsonArray("data");
-        if (data.isEmpty()) {
-            throw new BackOfficeUserException("Door search returned no results!");
-        }
-        Long orgentityId = data.get(0).getAsJsonObject().get("orgentityId").getAsLong();
-
-        String urlPost = url.replace("{storeIdentifier}", storeToImpersonificate.getStoreIdentifier()).replace("{locale}", storeToImpersonificate.getLocale());
-
-        APIResponse responsePost = context.post(String.format("%s/%s?storeSelected=%s", urlPost, orgentityId, storeToImpersonificate.getStoreCode()));
-
-        if (!responsePost.ok()) {
-            throw new RuntimeException("Error while impersonificating user: " + userToImpersonificate);
-        }
-
-        setAttribute(Constants.USER_ATTRIBUTES.CURRENT_IMPERSONIFICATION, userToImpersonificate);
-        setAttribute(Constants.USER_ATTRIBUTES.STORE, storeToImpersonificate.getStoreIdentifier());
-        setAttribute(Constants.USER_ATTRIBUTES.LOCALE, storeToImpersonificate.getLocale());
-        deleteAttribute(Constants.USER_ATTRIBUTES.URL);
-        context.dispose();
-    }
 }

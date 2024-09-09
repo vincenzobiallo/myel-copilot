@@ -1,4 +1,4 @@
-package com.luxottica.testautomation.report.models;
+package com.luxottica.testautomation.components.report.models;
 
 import lombok.Data;
 

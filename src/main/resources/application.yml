@@ -1,3 +1,6 @@
+logging:
+  level:
+    com.luxottica.testautomation: TRACE
 myel:
   baseUrl: 'https://certi-my.essilorluxottica.com'
   sessionUrl: '/fo-bff/admin/current-session'

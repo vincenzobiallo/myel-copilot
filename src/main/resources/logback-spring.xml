@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss} %red([%thread]) %magenta(%-5level) %green([%-40.40logger{39}]) » %yellow(%msg) %n
+            </pattern>
+        </layout>
+    </appender>
+
+    <logger name="com.luxottica.testautomation" level="TRACE" additivity="false">
+        <appender-ref ref="consoleLog" />
+    </logger>
+</configuration>

@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 
-import static com.luxottica.testautomation.constants.Constants.LABELS.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
 

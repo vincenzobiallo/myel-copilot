@@ -11,11 +11,27 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 
-import static com.luxottica.testautomation.constants.Constants.LABELS.*;
+import static com.luxottica.testautomation.constants.Label.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 
 public class RXTest extends BaseTest {
 
+    @Test(testName = "AT016", description = "Process flow Standard warranty")
+    @Impersonificate(door = "0001001081", store = "myl-it")
+    public void processFlowStandardWarranty(Method method) {
+        String testId = initTestAndReturnId(method);
+
+        executeStep(1, testId, () -> {
+            String authentics = getURL() + "/rx-prescription?rxFlow=Authentics";
+            page.navigate(authentics);
+
+            page.locator("//div[contains(text(), '" + "Cerca brand" + "')]").click();
+
+            return TestStatus.PASSED;
+        });
+    }
+
+     */
     /*@Test(testName = "AT016", description = "Process flow Standard warranty")
     @Impersonificate(door = "0001001081", store = MyelStoreold.ITALY)
     public void processFlowStandardWarranty(Method method) {

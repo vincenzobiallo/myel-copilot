@@ -1,6 +1,5 @@
 package com.luxottica.testautomation;
 
-import com.luxottica.testautomation.annotations.Impersonificate;
 import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
@@ -8,9 +7,7 @@ import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.LocatorAssertions;
-import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -18,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.luxottica.testautomation.constants.Constants.LABELS.COOKIE_POLICY_BANNER_MESSAGE;
+import static com.luxottica.testautomation.constants.Label.COOKIE_POLICY_BANNER_MESSAGE;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;

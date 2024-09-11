@@ -85,7 +85,14 @@ public class ReportComponentImpl implements ReportComponent {
         // Genero un nome univoco per il report (e.g. Report_NRT_2024-05-06_<timestamp>.xlsx)
         LocalDateTime now = LocalDateTime.now();
         String reportName = "Report_NRT_" + now.toString().replace(":", "-").replace(".", "-") + ".xlsx";
-        String reportPath = "playwright/report/results/" + reportName;
+        String reportPath = "playwright/report/results/";
+
+        // check if report folder exists
+        File reportFolder = new File(reportPath);
+        if (!reportFolder.exists()) {
+            reportFolder.mkdirs();
+        }
+        reportPath += reportName;
 
         try {
             File template = getTemplate();

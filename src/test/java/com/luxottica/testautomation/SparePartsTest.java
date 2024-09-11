@@ -12,22 +12,20 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 
-import static com.luxottica.testautomation.constants.Constants.LABELS.AFTERSALES_CONVERSATIONAL_SEARCH_BRAND_PLACEHOLDER;
-import static com.luxottica.testautomation.constants.Constants.LABELS.AFTERSALES_CONVERSATIONAL_SEARCH_MODEL_PLACEHOLDER;
+import static com.luxottica.testautomation.constants.Label.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class SparePartsTest extends BaseTest {
 
-    /*@Test(testName = "AT016", description = "Spare parts - Complete flow")
-    @Impersonificate(door = "0001001081", store = MyelStoreold.ITALY)
+    @Test(testName = "AT016", description = "Spare parts - Complete flow")
     public void sparePartsCompleteFlow(Method method) {
 
         String testId = initTestAndReturnId(method);
+        LabelComponentImpl labelComponent = InjectionUtil.getBean(LabelComponentImpl.class);
 
-        LabelComponentImpl labelUtils = InjectionUtil.getBean(LabelComponentImpl.class);
-        String findBrandLabel = labelUtils.getLabel(getUser(), AFTERSALES_CONVERSATIONAL_SEARCH_BRAND_PLACEHOLDER);
-        String findModelLabel = labelUtils.getLabel(getUser(), AFTERSALES_CONVERSATIONAL_SEARCH_MODEL_PLACEHOLDER);
+        String findBrandLabel = labelComponent.getLabel(AFTERSALES_CONVERSATIONAL_SEARCH_BRAND_PLACEHOLDER);
+        String findModelLabel = labelComponent.getLabel(AFTERSALES_CONVERSATIONAL_SEARCH_MODEL_PLACEHOLDER);
 
         executeStep(1, testId, () -> {
             String sparePage = getURL() + "/spare-parts";
@@ -61,7 +59,7 @@ public class SparePartsTest extends BaseTest {
         });
 
         executeStep(4, testId, () -> {
-            String ctaLabel = labelUtils.getLabel(getUser(), Constants.LABELS.AFTERSALES_CONVERSATIONAL_VIEW_SPAREPARTS_CTA);
+            String ctaLabel = labelComponent.getLabel(AFTERSALES_CONVERSATIONAL_VIEW_SPAREPARTS_CTA);
 
             Locator cta = page.locator("//button[contains(text(), '" + ctaLabel + "')]");
             cta.click();
@@ -72,9 +70,9 @@ public class SparePartsTest extends BaseTest {
 
         executeStep(5, testId, () -> {
             String url = page.url();
-            assertTrue(url.contains("/spare-parts/"));
+            page.waitForURL("**/spare-parts/**");
 
             return TestStatus.PASSED;
         });
-    }*/
+    }
 }

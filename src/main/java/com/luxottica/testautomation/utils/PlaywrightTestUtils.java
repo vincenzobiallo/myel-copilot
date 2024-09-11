@@ -2,24 +2,21 @@ package com.luxottica.testautomation.utils;
 
 import com.luxottica.testautomation.components.labels.LabelComponentImpl;
 import com.luxottica.testautomation.components.report.ReportComponentImpl;
-import com.luxottica.testautomation.models.User;
 import com.luxottica.testautomation.components.report.enums.ReportType;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.components.report.models.TestCase;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
-import lombok.Getter;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.luxottica.testautomation.constants.Constants.LABELS.COOKIE_POLICY_BANNER_REFUSE;
+import static com.luxottica.testautomation.constants.Label.COOKIE_POLICY_BANNER_REFUSE;
 
 public class PlaywrightTestUtils {
 

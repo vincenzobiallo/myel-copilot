@@ -1,6 +1,6 @@
 package com.luxottica.testautomation;
 
-import com.luxottica.testautomation.components.report.ReportComponentImpl;
+import com.luxottica.testautomation.components.report.ReportComponent;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.AfterSuite;
@@ -13,7 +13,7 @@ public class GlobalConfiguration {
     @AfterSuite
     void teardown() throws IOException {
         log.info("Tearing down...");
-        ReportComponentImpl report = InjectionUtil.getBean(ReportComponentImpl.class);
+        ReportComponent report = InjectionUtil.getBean(ReportComponent.class);
         report.generateReport();
     }
 }

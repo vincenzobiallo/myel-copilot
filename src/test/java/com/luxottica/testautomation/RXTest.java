@@ -1,6 +1,7 @@
 package com.luxottica.testautomation;
 
 import com.luxottica.testautomation.annotations.Impersonificate;
+import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.components.labels.LabelComponentImpl;
 import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
@@ -16,23 +17,27 @@ import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.ass
 
 public class RXTest extends BaseTest {
 
-    @Test(testName = "AT016", description = "Process flow Standard warranty")
-    @Impersonificate(door = "0001001081", store = "myl-it")
-    public void processFlowStandardWarranty(Method method) {
+    @Test(testName = "AT019", description = "Verify complete job process - non multifocal (single vision)")
+    public void verifyCompleteJobProcessNonMultifocal(Method method) {
+
         String testId = initTestAndReturnId(method);
+        LabelComponent labelComponent = InjectionUtil.getBean(LabelComponent.class);
+
+        final String selectedBrand = "Oakley";
 
         executeStep(1, testId, () -> {
             String authentics = getURL() + "/rx-prescription?rxFlow=Authentics";
             page.navigate(authentics);
 
+            final String findBrandLabel = labelComponent.getLabel(RX_CHOOSE_BRAND);
+            logger.trace("Click on div with text: {}", RX_CHOOSE_BRAND);
             page.locator("//div[contains(text(), '" + "Cerca brand" + "')]").click();
 
             return TestStatus.PASSED;
         });
     }
 
-     */
-    /*@Test(testName = "AT016", description = "Process flow Standard warranty")
+    @Test(testName = "AT016", description = "Process flow Standard warranty")
     @Impersonificate(door = "0001001081", store = MyelStoreold.ITALY)
     public void processFlowStandardWarranty(Method method) {
 

@@ -1,20 +1,21 @@
 package com.luxottica.testautomation;
 
+import com.google.gson.JsonParser;
 import com.luxottica.testautomation.annotations.Impersonificate;
 import com.luxottica.testautomation.components.cart.CartService;
 import com.luxottica.testautomation.components.cart.dto.CartDTO;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
-import com.luxottica.testautomation.models.MyelStore;
 import com.luxottica.testautomation.security.Context;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Request;
 import com.microsoft.playwright.options.LoadState;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
+import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class PDPTest extends BaseTest {
@@ -30,8 +31,8 @@ public class PDPTest extends BaseTest {
             String plpPage = getURL() + "/plp/frames?PRODUCT_CATEGORY_FILTER=" + CATEGORY;
             page.navigate(plpPage);
             logger.trace("Clicking on the first tile");
-            Locator tile = page.locator("//div[contains(@data-description, 'RB')][1]//img");
-            tile.click();
+            Locator firstTile = page.locator("//a[contains(@class, 'Tile')]/div/img").first();
+            firstTile.click();
 
             page.waitForLoadState(LoadState.NETWORKIDLE);
             return TestStatus.PASSED;
@@ -50,16 +51,17 @@ public class PDPTest extends BaseTest {
             Locator increaseQuantity = page.locator("//div[contains(@class, 'AddSizeList')][1]/div[contains(@class, 'AddSize')]/div[contains(@class, 'AddSize')]/div[contains(@class, 'AddSize')][2]//div[contains(@class, 'IconButton')][2]/button[contains(@class, 'IconButton')]").first();
             increaseQuantity.click();
 
-            logger.trace("Getting the UPC value");
-            Locator upc = page.locator("//div[contains(@class, 'AddSize')][2]/span[@color='primary']");
-            assertThat(upc).isVisible();
-            upcValue.set(upc.innerText().replaceAll("[A-Za-z]", "").trim());
-            logger.trace("UPC value: {}", upcValue.get());
+            logger.trace("Extracting the UPC value from request triggered by adding the product to the cart");
+            Request request = page.waitForRequest("**/items", () -> {
+                Locator addToCart = page.locator("//button[@data-element-id='AddToCart']");
+                addToCart.scrollIntoViewIfNeeded();
+                addToCart.click();
+            });
 
-            logger.trace("Adding the product to the cart");
-            Locator addToCart = page.locator("//button[@data-element-id='AddToCart']");
-            addToCart.scrollIntoViewIfNeeded();
-            addToCart.click();
+            String upc = JsonParser.parseString(request.postData()).getAsJsonObject().get("orderItem").getAsJsonArray()
+                    .get(0).getAsJsonObject().get("xitem_upc").getAsString();
+            logger.debug("UPC value: {}", upc);
+            upcValue.set(upc);
             page.waitForLoadState(LoadState.NETWORKIDLE);
 
             return TestStatus.PASSED;
@@ -76,8 +78,7 @@ public class PDPTest extends BaseTest {
         });
     }
 
-    @Test(testName = "AT015", description = "Check Sunglasses PDP and add to cart")
-    @Impersonificate(door = "0001026276", store = "myl-it")
+    @Test(testName = "AT016", description = "Check AFA PDP and add to cart")
     public void checkAFAPDP(Method method) {
 
         String testId = initTestAndReturnId(method);
@@ -86,8 +87,8 @@ public class PDPTest extends BaseTest {
         executeStep(1, testId, () -> {
             String plpPage = getURL() + "/plp/apparel-footwear-and-accessories";
             page.navigate(plpPage);
-            Locator tile = page.locator("//div[contains(@data-description, 'FOA')][1]/div[1]//img");
-            tile.click();
+            Locator firstTile = page.locator("//a[contains(@class, 'Tile')]/div/img").first();
+            firstTile.click();
 
             page.waitForLoadState(LoadState.NETWORKIDLE);
             return TestStatus.PASSED;
@@ -102,23 +103,28 @@ public class PDPTest extends BaseTest {
 
         AtomicReference<String> upcValue = new AtomicReference<>();
         executeStep(3, testId, () -> {
-            Locator increaseQuantity = page.locator("//div[contains(@class, 'AddSizeAFA')][0]//div[contains(@class, 'IconButton')][0]/button[contains(@class, 'IconButton')]").first();
-            increaseQuantity.click();
+            logger.trace("Increasing the quantity of the product");
+            Locator increaseQuantity = page.locator("//div[contains(@class, 'PDPListAFA')]//div[contains(@class, 'AddSizeAFA')]//input[contains(@class, 'AddSizeAFA')]").first();
+            increaseQuantity.fill("1");
 
-            Locator upc = page.locator("//div[contains(@class, 'AddSize')][2]/span[@color='primary']");
-            assertThat(upc).isVisible();
-            upcValue.set(upc.innerText().replaceAll("[A-Za-z]", "").trim());
+            logger.trace("Extracting the UPC value from request triggered by adding the product to the cart");
+            Request request = page.waitForRequest("**/items", () -> {
+                Locator addToCart = page.locator("//button[@data-element-id='AddToCart']");
+                addToCart.scrollIntoViewIfNeeded();
+                addToCart.click();
+            });
 
-            Locator addToCart = page.locator("//button[@data-element-id='AddToCart']");
-            addToCart.scrollIntoViewIfNeeded();
-            addToCart.click();
-            page.waitForLoadState(LoadState.NETWORKIDLE);
+            String upc = JsonParser.parseString(request.postData()).getAsJsonObject().get("orderItem").getAsJsonArray()
+                    .get(0).getAsJsonObject().get("xitem_upc").getAsString();
+            logger.debug("UPC value: {}", upc);
+            upcValue.set(upc);
 
+            assertNotNull(upcValue.get());
             return TestStatus.PASSED;
         });
 
-        // Check if the product is in the cart in the sunglasses category
         executeStep(4, testId, () -> {
+            logger.trace("Checking if the product is in the cart in AFA category");
             CartService cartService = InjectionUtil.getBean(CartService.class);
             CartDTO cart = cartService.getCart(Context.getPlaywright(), getUser());
 

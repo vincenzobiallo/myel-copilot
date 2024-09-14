@@ -14,6 +14,7 @@ import com.luxottica.testautomation.components.report.models.TestStepFunction;
 import com.luxottica.testautomation.configuration.Config;
 import com.luxottica.testautomation.dto.CopilotDTO;
 import com.luxottica.testautomation.exceptions.BackOfficeUserException;
+import com.luxottica.testautomation.exceptions.MySkipException;
 import com.luxottica.testautomation.exceptions.UserAttributeException;
 import com.luxottica.testautomation.models.MyelStore;
 import com.luxottica.testautomation.models.User;
@@ -102,7 +103,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         String testDescription = test.description();
 
         if (PlaywrightTestUtils.anyStepFailed(testId)) {
-            page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots", testDescription + ".png")));
+            page.screenshot(PlaywrightTestUtils.getScreenshotOptions(testDescription));
         }
 
         context.close();
@@ -169,7 +170,15 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
             logger.error("Assertion error executing step {} for test {}! {}", number, test.getId(), e.getMessage());
             test.setFailed(Boolean.TRUE);
         } catch (SkipException skipException) {
-            logger.info(skipException.getMessage());
+            logger.warn(skipException.getMessage());
+            step.setNote(skipException.getMessage());
+            step.setStatus(TestStatus.TO_BE_RETESTED);
+            if (skipException instanceof MySkipException) {
+                MySkipException mySkipException = (MySkipException) skipException;
+                if (mySkipException.makeScreenshot()) {
+                    page.screenshot(PlaywrightTestUtils.getScreenshotOptions(String.format("skip_%s", test.getInternalId())));
+                }
+            }
             throw skipException;
         } catch (Exception e) {
             step.setStatus(TestStatus.FAILED);

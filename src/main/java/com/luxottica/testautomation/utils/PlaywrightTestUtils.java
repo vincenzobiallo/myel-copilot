@@ -1,17 +1,21 @@
 package com.luxottica.testautomation.utils;
 
+import com.google.gson.JsonElement;
 import com.luxottica.testautomation.components.labels.LabelComponentImpl;
-import com.luxottica.testautomation.components.report.ReportComponentImpl;
+import com.luxottica.testautomation.components.report.ReportComponent;
 import com.luxottica.testautomation.components.report.enums.ReportType;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.components.report.models.TestCase;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Response;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import org.springframework.lang.Nullable;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,7 +25,7 @@ import static com.luxottica.testautomation.constants.Label.COOKIE_POLICY_BANNER_
 public class PlaywrightTestUtils {
 
     public static boolean anyStepFailed(String testId) {
-        ReportComponentImpl report = InjectionUtil.getBean(ReportComponentImpl.class);
+        ReportComponent report = InjectionUtil.getBean(ReportComponent.class);
         TestCase test = Objects.requireNonNull(report.getTests().get(testId), String.format("Test %s not found!", testId));
         return test.getSteps().stream().anyMatch(step -> step.getStatus().equals(TestStatus.FAILED));
     }
@@ -42,6 +46,10 @@ public class PlaywrightTestUtils {
     public static boolean containClass(Locator locator, String clazz, String message) {
         List<String> classes = List.of(locator.getAttribute("class").toLowerCase().split(" "));
         return classes.contains(clazz.toLowerCase());
+    }
+
+    public static Page.ScreenshotOptions getScreenshotOptions(String name) {
+        return new Page.ScreenshotOptions().setPath(Paths.get("screenshots", name + ".png"));
     }
 
     public static void closeAllPopups(Page page, @Nullable Boolean closeCookieBanner) {

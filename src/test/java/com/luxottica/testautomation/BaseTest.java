@@ -173,8 +173,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
             logger.warn(skipException.getMessage());
             step.setNote(skipException.getMessage());
             step.setStatus(TestStatus.TO_BE_RETESTED);
-            if (skipException instanceof MySkipException) {
-                MySkipException mySkipException = (MySkipException) skipException;
+            if (skipException instanceof MySkipException mySkipException) {
                 if (mySkipException.makeScreenshot()) {
                     page.screenshot(PlaywrightTestUtils.getScreenshotOptions(String.format("skip_%s", test.getInternalId())));
                 }

@@ -17,5 +17,6 @@ public class Errors {
     public static final String WRONG_DATA_IN_MENU = getError("Columns in sub-menu are not complete!");
     public static final String ELEMENTS_DISABLED = getError("Element is disabled!");
     public static final String CLASS_NOT_FOUND = getError("Specified class is not present!");
+    public static final String NO_RESULTS = getError("No results found!");
 
 }

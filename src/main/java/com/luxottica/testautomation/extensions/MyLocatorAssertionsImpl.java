@@ -182,6 +182,7 @@ public class MyLocatorAssertionsImpl extends LocatorAssertionsImpl implements My
     public void isAttached(LocatorAssertions.IsAttachedOptions options, String message) {
         handleAssertionMessage(() -> super.isAttached(options), message);
     }
+
 }
 
 

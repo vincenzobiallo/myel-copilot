@@ -35,4 +35,10 @@ public class Label {
     public static final String JOB_TYPE_RX_FRAME_TO_COME = "JOB_TYPE_RX_FRAME_TO_COME";
     public static final String JOB_TYPE_RX_LENS_ONLY = "JOB_TYPE_RX_LENS_ONLY";
     public static final String RX_DISPLAY_LENS = "RX_DISPLAY_LENS";
+
+    public static final String ESSILOR_PRESCRIPTION_SPHERE = "ESSILOR_PRESCRIPTION_SPHERE";
+    public static final String ESSILOR_PRESCRIPTION_PD = "ESSILOR_PRESCRIPTION_PD";
+    public static final String ESSILOR_PRESCRIPTION_HEIGHT = "ESSILOR_PRESCRIPTION_HEIGHT";
+
+    public static final String SEARCH_SORRY_NO_RESULTS = "SEARCH_SORRY_NO_RESULTS";
 }

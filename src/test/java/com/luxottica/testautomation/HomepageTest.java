@@ -1,6 +1,7 @@
 package com.luxottica.testautomation;
 
 import com.luxottica.testautomation.components.labels.LabelComponent;
+import com.luxottica.testautomation.constants.Constants;
 import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.utils.InjectionUtil;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.luxottica.testautomation.constants.Label.COOKIE_POLICY_BANNER_MESSAGE;
+import static com.luxottica.testautomation.constants.Label.SEARCH_SORRY_NO_RESULTS;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -399,7 +401,7 @@ public class HomepageTest extends BaseTest {
         executeStep(1, testId, () -> TestStatus.PASSED); // First step is always log with BO User (landInPage())
 
         executeStep(2, testId, () -> {
-            logger.debug("Open Service Menu");
+            logger.trace("Opening Service Menu");
             page.locator("button[data-element-id='MainNav_Services']").click();
             assertThat(page.locator("div#menu-container>div")).isVisible();
             return TestStatus.PASSED;
@@ -417,6 +419,71 @@ public class HomepageTest extends BaseTest {
 
             List<String> links = urls.stream().map(url -> url.getAttribute("data-element-id")).collect(Collectors.toList());
             return links.containsAll(LINK_MUST_CONTAIN) ? TestStatus.PASSED : TestStatus.PASSED_WITH_MINOR;
+        });
+    }
+
+    @Test(testName = "AT020", description = "Leonardo Link")
+    public void leonardoLink(Method method) {
+
+        String testId = initTestAndReturnId(method);
+        executeStep(1, testId, () -> TestStatus.PASSED); // First step is always log with BO User (landInPage())
+
+        executeStep(2, testId, () -> {
+            Locator leonardoBtn = page.locator("//button[@data-element-id='MainNav_Leonardo']");
+            logger.trace("Veryfing Leonardo link is visible in header");
+            assertThat(leonardoBtn).isVisible(Errors.ELEMENTS_NOT_VISIBLE);
+
+            logger.trace("Clicking on Leonardo link");
+            Page leonardoPage = page.waitForPopup(new Page.WaitForPopupOptions().setTimeout(10000), leonardoBtn::click);
+            leonardoPage.waitForLoadState(LoadState.LOAD);
+
+            logger.trace("Verifying new page is opened");
+            assertEquals(page.context().pages().size(), 2);
+
+            Locator profileIcon = leonardoPage.locator("//button[@data-element-id='mainNav_account']");
+            logger.trace("Verifyng SSO is working");
+            assertThat(profileIcon).isVisible("SSO is not working");
+
+            return TestStatus.PASSED;
+        });
+    }
+
+    @Test(testName = "AT021", description = "Search UPC")
+    public void searchUPC(Method method) {
+
+        String testId = initTestAndReturnId(method);
+        executeStep(1, testId, () -> TestStatus.PASSED); // First step is always log with BO User (landInPage())
+
+        final String upc = "888392605245";
+
+        executeStep(2, testId, () -> {
+            Locator searchBtn = page.locator("button[data-element-id='MainNav_Search_SearchBox']");
+            logger.trace("Clicking on Search Button");
+            searchBtn.click();
+
+            Locator searchInput = page.locator("input[data-element-id='MainNav_Search']");
+            logger.trace("Verifying Search Input is visible");
+            assertThat(searchInput).isVisible(Errors.ELEMENTS_NOT_VISIBLE);
+
+            logger.trace("Filling Search Input with UPC {}", upc);
+            searchInput.fill(upc);
+            searchInput.press(Constants.KEYS.ENTER);
+            page.waitForLoadState(LoadState.NETWORKIDLE);
+
+            logger.trace("Verifying Search Results Page is opened");
+            page.waitForURL(String.format("**/search-results/%s", upc));
+            page.waitForLoadState(LoadState.NETWORKIDLE);
+
+            LabelComponent labelComponent = InjectionUtil.getBean(LabelComponent.class);
+            String noResultLabel = labelComponent.getLabel(SEARCH_SORRY_NO_RESULTS);
+            Locator noResults = page.locator("//p[contains(text(), '" + noResultLabel + "')]");
+            logger.trace("Verifying Search Results are not empty");
+            if (noResults.isVisible()) {
+                logger.warn("No results found for UPC {}", upc);
+                return TestStatus.PASSED_WITH_MINOR;
+            }
+
+            return TestStatus.PASSED;
         });
     }
 

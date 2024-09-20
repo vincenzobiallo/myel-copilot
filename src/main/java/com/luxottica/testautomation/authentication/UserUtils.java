@@ -27,6 +27,7 @@ public class UserUtils {
 
     static { // TODO - Dynamically load users from a file
         File file = new File("users.csv");
+        users.add(new User("user.0001026276.it", "Luxottic@B2B789!!"));
         if (file.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;

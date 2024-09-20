@@ -14,4 +14,8 @@ public class Constants {
         public static final String LOCALE = "locale";
         public static final String CURRENT_IMPERSONIFICATION = "currentImpersonification";
     }
+
+    public static class KEYS {
+        public static final String ENTER = "Enter";
+    }
 }

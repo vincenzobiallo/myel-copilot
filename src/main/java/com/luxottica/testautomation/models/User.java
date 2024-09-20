@@ -14,10 +14,7 @@ import com.luxottica.testautomation.utils.RequestUtils;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.apache.logging.log4j.util.Strings;
 
 import java.nio.file.Paths;
@@ -27,12 +24,19 @@ import java.util.Map;
 import static com.luxottica.testautomation.authentication.PlaywrightFactory.areCookiesPresent;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     private String username;
     private String password;
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     private Map<String, String> attributes = new LinkedHashMap<>();
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     private boolean isBackOfficeUser = false;
 

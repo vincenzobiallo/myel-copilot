@@ -5,6 +5,7 @@ import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.components.labels.LabelComponentImpl;
 import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
+import com.luxottica.testautomation.models.RXPrescriptionAttribute;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.luxottica.testautomation.utils.PlaywrightTestUtils;
 import com.microsoft.playwright.Locator;
@@ -12,13 +13,13 @@ import com.microsoft.playwright.options.LoadState;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.luxottica.testautomation.constants.Label.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class RXTest extends BaseTest {
 
@@ -29,8 +30,11 @@ public class RXTest extends BaseTest {
         LabelComponent labelComponent = InjectionUtil.getBean(LabelComponent.class);
 
         final String selectedBrand = "Chanel";
-        final String selectedSubBrand = "Optical";
+        final String selectedSubBrand = "Sun";
         final String noBrandOption = labelComponent.getLabel(RX_SELECT_ERROR_NO_OPTS);
+
+        final String model = "0CH4189TQ";
+        final String color = "C11287-Brown";
 
         executeStep(1, testId, () -> {
             String authentics = getURL() + "/rx-prescription?rxFlow=Authentics";
@@ -83,10 +87,90 @@ public class RXTest extends BaseTest {
         });
 
         executeStep(2, testId, () -> {
-            page.pause();
+
+            Locator findModel = page.locator("//div[@class='model-form-custom d-flex']/div[contains(@class, 'CustomSelect')]/div[contains(@class, 'custom-select')]/div[contains(@class, 'custom-select')]").first();
+            findModel.click();
+            Locator modelInput = findModel.locator("input").first();
+            modelInput.fill(model);
+            Locator modelOption = page.locator("//div[@class='menulist menulist-one-line']/div/button/div[contains(@class, 'custom-select')]/div[contains(@class, 'CustomSelect')]/div[contains(@class, 'CustomSelect')]/div/div[contains(@class, 'CustomSelect')]");
+            modelOption.click();
+
+            Locator findColor = page.locator("//div[contains(@class, 'CustomSelect')][2]/div[contains(@class, 'custom-select')][1]").first();
+            findColor.click();
+            Locator colorOption = findColor.locator("input").first();
+            colorOption.fill(color);
+            Locator colorOptionValue = page.locator("//div[@class='menulist menulist-one-line']/div/button/div[contains(@class, 'custom-select')]/div[contains(@class, 'CustomSelect')]/div[contains(@class, 'CustomSelect')]/div/div[contains(@class, 'CustomSelect')]");
+            colorOptionValue.click();
+
+            Locator findSize = page.locator("//div[contains(@class, 'CustomSelect')][3]/div[contains(@class, 'custom-select')][1]/div[contains(@class, 'custom-select')][1]").first();
+            findSize.click();
+            Locator firstOption = page.locator("//div[@class='menulist menulist-one-line']/div/button/div[contains(@class, 'custom-select')]/div[contains(@class, 'CustomSelect')]/div[contains(@class, 'CustomSelect')]/div/div[contains(@class, 'CustomSelect')]");
+            firstOption.click();
+
+            Locator prescriptionTable = getPrescriptionTable();
+            List<RXPrescriptionAttribute> prescriptionColumns = getPrescriptionColumns(prescriptionTable);
+
+            final String sphereLabel = labelComponent.getLabel(ESSILOR_PRESCRIPTION_SPHERE);
+            RXPrescriptionAttribute sphere = getPrescriptionAttribute(sphereLabel, prescriptionColumns);
+            sphere.getInputRight().fill("+0.00");
+            sphere.getInputLeft().fill("+0.00");
+
+            final String pdLabel = labelComponent.getLabel(ESSILOR_PRESCRIPTION_PD);
+            RXPrescriptionAttribute pd = getPrescriptionAttribute(pdLabel, prescriptionColumns);
+            pd.getInputRight().fill("33");
+            pd.getInputLeft().fill("33");
+
+            final String heightLabel = labelComponent.getLabel(ESSILOR_PRESCRIPTION_HEIGHT);
+            RXPrescriptionAttribute height = getPrescriptionAttribute(heightLabel, prescriptionColumns);
+            height.getInputRight().fill("17");
+            height.getInputLeft().fill("17");
 
             return TestStatus.PASSED;
         });
+    }
+
+    private Locator getPrescriptionTable() {
+        return page.locator("div[class^='PrescriptionTable__Table']").first();
+    }
+
+    private List<RXPrescriptionAttribute> getPrescriptionColumns(Locator prescriptionTable) {
+
+        List<RXPrescriptionAttribute> attributes = new LinkedList<>();
+
+        List<Locator> columns = prescriptionTable.locator("div[class^='PrescriptionTable__Column-']").all()
+                .stream().filter(column -> !PlaywrightTestUtils.containClass(column, "column-int", Errors.CLASS_NOT_FOUND)).toList();
+
+        for (Locator column : columns) {
+            Locator header = column.locator("div[class^='PrescriptionTable__ColumnHeader']").first();
+            String columnName = header.locator("p").innerHTML();
+            logger.debug("Extracting the text from the column header: {}", columnName);
+
+            List<Locator> content = column.locator("div[class^='PrescriptionTable__ColumnContent-']").all();
+            assertEquals(content.size(), 2, "The column should have 2 elements: right eye and left one");
+
+            Locator rightEye = content.get(0);
+            Locator leftEye = content.get(1);
+
+            Locator inputRightEye = rightEye.locator("input").first();
+            Locator inputLeftEye = leftEye.locator("input").first();
+
+            attributes.add(RXPrescriptionAttribute.builder()
+                    .identifier(columnName)
+                    .inputRight(inputRightEye)
+                    .inputLeft(inputLeftEye)
+                    .build());
+        }
+
+        return attributes;
+    }
+
+    private RXPrescriptionAttribute getPrescriptionAttribute(String identifier, List<RXPrescriptionAttribute> attributes) {
+        Optional<RXPrescriptionAttribute> attr =  attributes.stream().filter(attribute -> attribute.getIdentifier().equals(identifier)).findFirst();
+        if (attr.isEmpty()) {
+            throw new NullPointerException(String.format("Attribute with identifier %s not found", identifier));
+        }
+
+        return attr.get();
     }
 
     /*@Test(testName = "AT016", description = "Process flow Standard warranty")

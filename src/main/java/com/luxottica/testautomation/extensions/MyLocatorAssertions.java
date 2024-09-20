@@ -37,4 +37,15 @@ public interface MyLocatorAssertions extends LocatorAssertions {
     default void isEnabled() {
         this.isEnabled(null, Errors.ELEMENTS_DISABLED);
     }
+
+    @Override
+    default void isHidden() {
+        this.isHidden(null, Errors.NO_RESULTS);
+    }
+
+    default void isHidden(String messageOnFailure) {
+        this.isHidden(null, messageOnFailure);
+    }
+
+    void isHidden(IsHiddenOptions options, String messageOnFailure);
 }

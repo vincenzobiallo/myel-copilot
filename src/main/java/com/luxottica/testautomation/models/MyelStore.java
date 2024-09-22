@@ -1,12 +1,14 @@
 package com.luxottica.testautomation.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 public class MyelStore {
 

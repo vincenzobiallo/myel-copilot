@@ -13,12 +13,12 @@ import com.microsoft.playwright.Response;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import org.springframework.lang.Nullable;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static com.luxottica.testautomation.constants.Label.COOKIE_POLICY_BANNER_REFUSE;
 
@@ -43,9 +43,15 @@ public class PlaywrightTestUtils {
         return input.map(ReportType::valueOf).orElseGet(() -> ReportType.valueOf("CORE"));
     }
 
-    public static boolean containClass(Locator locator, String clazz, String message) {
-        List<String> classes = List.of(locator.getAttribute("class").toLowerCase().split(" "));
+    public static boolean containClass(Locator locator, String clazz) {
+        Set<String> classes = Set.of(locator.getAttribute("class").toLowerCase().split(" "));
         return classes.contains(clazz.toLowerCase());
+    }
+
+    public static boolean containClass(Locator locator, List<String> clazz) {
+        Set<String> classes = Set.of(locator.getAttribute("class").toLowerCase().split(" "));
+
+        return classes.containsAll(clazz);
     }
 
     public static Page.ScreenshotOptions getScreenshotOptions(String name) {
@@ -74,5 +80,22 @@ public class PlaywrightTestUtils {
         if (closeCookieBanner == Boolean.TRUE && refuseCookie.isVisible()) {
             refuseCookie.click();
         }
+    }
+
+    public static MultiValueMap<String, String> getQueryMap(String url) {
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+
+        String[] parts = url.split("\\?");
+        if (parts.length > 1) {
+            String query = parts[1];
+            for (String param : query.split("&")) {
+                String[] pair = param.split("=");
+                String key = pair[0];
+                String value = pair.length > 1 ? pair[1] : "";
+                queryParams.add(key, value);
+            }
+        }
+
+        return queryParams;
     }
 }

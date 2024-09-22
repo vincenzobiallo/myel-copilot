@@ -1,14 +1,12 @@
 package com.luxottica.testautomation.components.bucket;
 
-import com.luxottica.testautomation.components.bucket.dto.BucketDataDTO;
+import com.luxottica.testautomation.components.bucket.dto.DataDTO;
+import com.luxottica.testautomation.components.bucket.dto.DataTestDTO;
 
 public interface BucketComponent {
 
-    String MAPPER = "playwright/report/test-mapping.xlsx";
-    String SHEET_MAPPING = "Mapping";
-    String SHEET_STORES = "Stores";
-    String Y = "Y";
+    String DATA_FILE = "playwright/report/data.json";
 
-    BucketDataDTO getBucketData(String internalTestId);
+    DataTestDTO getBucketData(String internalTestId);
     String getBusinessTestIdFromInternal(String internalTestId);
 }

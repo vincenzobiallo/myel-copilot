@@ -7,9 +7,8 @@ import com.luxottica.testautomation.annotations.Impersonificate;
 import com.luxottica.testautomation.authentication.PlaywrightFactory;
 import com.luxottica.testautomation.authentication.UserUtils;
 import com.luxottica.testautomation.components.bucket.BucketComponent;
-import com.luxottica.testautomation.components.bucket.dto.BucketDataDTO;
+import com.luxottica.testautomation.components.bucket.dto.DataTestDTO;
 import com.luxottica.testautomation.components.report.ReportComponent;
-import com.luxottica.testautomation.components.report.ReportComponentImpl;
 import com.luxottica.testautomation.components.report.models.TestStepFunction;
 import com.luxottica.testautomation.configuration.Config;
 import com.luxottica.testautomation.dto.CopilotDTO;
@@ -126,14 +125,13 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         }
 
         BucketComponent bucketComponent = InjectionUtil.getBean(BucketComponent.class);
-        BucketDataDTO bucket = bucketComponent.getBucketData(test.testName());
+        DataTestDTO bucket = bucketComponent.getBucketData(test.testName());
 
-        CopilotDTO pilot = new CopilotDTO();
-        pilot.setDoor(bucket.getUser());
-        pilot.setStore(MyelStore.fromStoreIdentifier(bucket.getStore()));
-        pilot.setImpersonate(bucket.getImpersonificate());
-
-        return pilot;
+        return CopilotDTO.builder()
+                .door(bucket.getDoor())
+                .store(MyelStore.fromStoreIdentifier(bucket.getStoreIdentifier()))
+                .isImpersonate(bucket.getImpersonificate())
+                .build();
     }
 
     /**
@@ -164,11 +162,13 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
             step.setNote("Timeout! Is the step waiting for an element that is not present?");
             logger.warn("Timeout executing step {} for test {}!", number, test.getId());
             test.setFailed(Boolean.TRUE);
+            throw new Error(e);
         } catch (AssertionError e) {
             step.setStatus(TestStatus.FAILED);
             step.setNote(e.getMessage());
             logger.error("Assertion error executing step {} for test {}! {}", number, test.getId(), e.getMessage());
             test.setFailed(Boolean.TRUE);
+            throw e;
         } catch (SkipException skipException) {
             logger.warn(skipException.getMessage());
             step.setNote(skipException.getMessage());
@@ -184,6 +184,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
             step.setNote(e.getMessage());
             logger.error("Error executing step {} for test {}! {}", number, test.getId(), e.getMessage());
             test.setFailed(Boolean.TRUE);
+            throw new Error(e);
         }
     }
 
@@ -292,12 +293,13 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         Test test = method.getAnnotation(Test.class);
         String testId = getBusinessTestId(test);
 
-        BucketDataDTO bucket = bucketComponent.getBucketData(test.testName());
-        String executor = bucket.getUser();
+        DataTestDTO bucket = bucketComponent.getBucketData(test.testName());
+        String executor = bucket.getDoor();
 
         TestCase testCase = reportComponent.getTests().get(testId);
         testCase.setExecutor(executor);
         testCase.setInternalId(test.testName());
+        Context.setTest(testCase);
 
         return testId;
     }
@@ -312,5 +314,21 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         }
 
         return businessId;
+    }
+
+    protected <T> T getAdditionalData(String key, Class<T> clazz) {
+        BucketComponent bucket = InjectionUtil.getBean(BucketComponent.class);
+
+        DataTestDTO data = bucket.getBucketData(Context.getTest().getInternalId());
+
+        if (data.getAdditionalData() == null) {
+            throw new IllegalArgumentException("Additional data not found!");
+        }
+
+        if (!data.getAdditionalData().containsKey(key)) {
+            throw new IllegalArgumentException(String.format("Key %s not found in additional data!", key));
+        }
+
+        return clazz.cast(data.getAdditionalData().get(key));
     }
 }

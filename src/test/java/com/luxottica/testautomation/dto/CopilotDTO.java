@@ -3,6 +3,7 @@ package com.luxottica.testautomation.dto;
 import com.luxottica.testautomation.models.MyelStore;
 import lombok.*;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CopilotDTO {

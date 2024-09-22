@@ -16,4 +16,9 @@ public class GlobalConfiguration {
         ReportComponent report = InjectionUtil.getBean(ReportComponent.class);
         report.generateReport();
     }
+
+    private void getAllTests() {
+        // get all tests frrom TestNG
+
+    }
 }

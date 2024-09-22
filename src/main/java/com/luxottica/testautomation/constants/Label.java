@@ -41,4 +41,5 @@ public class Label {
     public static final String ESSILOR_PRESCRIPTION_HEIGHT = "ESSILOR_PRESCRIPTION_HEIGHT";
 
     public static final String SEARCH_SORRY_NO_RESULTS = "SEARCH_SORRY_NO_RESULTS";
+    public static final String ORDER_HISTORY_FULL_DETAILS = "ORDER_HISTORY_FULL_DETAILS";
 }

@@ -13,12 +13,14 @@ public class Config {
 
     @Value("${myel.baseUrl}")
     private String baseUrl;
-    @Value("${myel.sessionUrl}")
+    @Value("${myel.endpoints.sessionUrl}")
     private String sessionUrl;
-    @Value("${myel.personificationUrl}")
+    @Value("${myel.endpoints.personificationUrl}")
     private String personificationUrl;
-    @Value("${myel.precart}")
+    @Value("${myel.endpoints.precart}")
     private String precart;
+    @Value("${myel.endpoints.multidoor}")
+    private String multidoor;
 
     @Bean
     public static InjectionUtil injectionUtil() {

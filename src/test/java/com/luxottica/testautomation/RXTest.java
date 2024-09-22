@@ -29,12 +29,12 @@ public class RXTest extends BaseTest {
         String testId = initTestAndReturnId(method);
         LabelComponent labelComponent = InjectionUtil.getBean(LabelComponent.class);
 
-        final String selectedBrand = "Chanel";
-        final String selectedSubBrand = "Sun";
+        final String selectedBrand = getAdditionalData("selectedBrand", String.class);
+        final String selectedSubBrand = getAdditionalData("selectedSubBrand", String.class);
         final String noBrandOption = labelComponent.getLabel(RX_SELECT_ERROR_NO_OPTS);
 
-        final String model = "0CH4189TQ";
-        final String color = "C11287-Brown";
+        final String model = getAdditionalData("model", String.class);
+        final String color = getAdditionalData("color", String.class);
 
         executeStep(1, testId, () -> {
             String authentics = getURL() + "/rx-prescription?rxFlow=Authentics";
@@ -68,7 +68,7 @@ public class RXTest extends BaseTest {
             Locator chipFull = page.locator("//p[contains(text(), '" + rxCompleteJobLabel.toUpperCase() + "')]");
             assertThat(chipFull).isVisible(Errors.ELEMENTS_NOT_VISIBLE);
             logger.trace("Check if RX_COMPLETE_JOB is active");
-            assertTrue(PlaywrightTestUtils.containClass(chipFull, "active", Errors.CLASS_NOT_FOUND));
+            assertTrue(PlaywrightTestUtils.containClass(chipFull, "active"));
 
             logger.trace("Check if boxes upc search and model search are shown");
             assertThat(page.locator("input[id='upc']")).isVisible(Errors.ELEMENTS_NOT_VISIBLE);
@@ -79,7 +79,7 @@ public class RXTest extends BaseTest {
             Locator displayLens = page.locator("//button[contains(text(), '" + displayLensLabel.toUpperCase() + "')]");
             displayLens.scrollIntoViewIfNeeded();
             assertThat(displayLens).isVisible(Errors.ELEMENTS_NOT_VISIBLE);
-            assertTrue(PlaywrightTestUtils.containClass(displayLens, "button-disabled", Errors.CLASS_NOT_FOUND));
+            assertTrue(PlaywrightTestUtils.containClass(displayLens, "button-disabled"));
 
             // div class error-icon
             // div error-text > p class CustomText__Text
@@ -110,20 +110,27 @@ public class RXTest extends BaseTest {
             Locator prescriptionTable = getPrescriptionTable();
             List<RXPrescriptionAttribute> prescriptionColumns = getPrescriptionColumns(prescriptionTable);
 
-            final String sphereLabel = labelComponent.getLabel(ESSILOR_PRESCRIPTION_SPHERE);
-            RXPrescriptionAttribute sphere = getPrescriptionAttribute(sphereLabel, prescriptionColumns);
+            //final String sphereLabel = labelComponent.getLabel(ESSILOR_PRESCRIPTION_SPHERE);
+            //RXPrescriptionAttribute sphere = getPrescriptionAttribute(sphereLabel, prescriptionColumns);
+            RXPrescriptionAttribute sphere = prescriptionColumns.get(0);
             sphere.getInputRight().fill("+0.00");
             sphere.getInputLeft().fill("+0.00");
 
-            final String pdLabel = labelComponent.getLabel(ESSILOR_PRESCRIPTION_PD);
-            RXPrescriptionAttribute pd = getPrescriptionAttribute(pdLabel, prescriptionColumns);
+            //final String pdLabel = labelComponent.getLabel(ESSILOR_PRESCRIPTION_PD);
+            //RXPrescriptionAttribute pd = getPrescriptionAttribute(pdLabel, prescriptionColumns);
+            RXPrescriptionAttribute pd = prescriptionColumns.get(3);
             pd.getInputRight().fill("33");
             pd.getInputLeft().fill("33");
 
-            final String heightLabel = labelComponent.getLabel(ESSILOR_PRESCRIPTION_HEIGHT);
-            RXPrescriptionAttribute height = getPrescriptionAttribute(heightLabel, prescriptionColumns);
+            //RXPrescriptionAttribute height = getPrescriptionAttribute(heightLabel, prescriptionColumns);
+            RXPrescriptionAttribute height = prescriptionColumns.get(8);
             height.getInputRight().fill("17");
             height.getInputLeft().fill("17");
+
+            final String displaylensLabel = labelComponent.getLabel(RX_DISPLAY_LENS);
+            Locator displayLens = page.locator("//button[contains(text(), '" + displaylensLabel.toUpperCase() + "')]");
+            displayLens.click();
+            page.waitForLoadState(LoadState.NETWORKIDLE);
 
             return TestStatus.PASSED;
         });
@@ -138,14 +145,15 @@ public class RXTest extends BaseTest {
         List<RXPrescriptionAttribute> attributes = new LinkedList<>();
 
         List<Locator> columns = prescriptionTable.locator("div[class^='PrescriptionTable__Column-']").all()
-                .stream().filter(column -> !PlaywrightTestUtils.containClass(column, "column-int", Errors.CLASS_NOT_FOUND)).toList();
+                .stream().filter(column ->
+                        !PlaywrightTestUtils.containClass(column,"column-int") && !PlaywrightTestUtils.containClass(column,"column-end")).toList();
 
         for (Locator column : columns) {
             Locator header = column.locator("div[class^='PrescriptionTable__ColumnHeader']").first();
             String columnName = header.locator("p").innerHTML();
             logger.debug("Extracting the text from the column header: {}", columnName);
 
-            List<Locator> content = column.locator("div[class^='PrescriptionTable__ColumnContent-']").all();
+            List<Locator> content = column.locator("div[class^='PrescriptionTable__ColumnContent-']").locator(">div").all();
             assertEquals(content.size(), 2, "The column should have 2 elements: right eye and left one");
 
             Locator rightEye = content.get(0);

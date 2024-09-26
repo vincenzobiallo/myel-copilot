@@ -3,6 +3,8 @@ package com.luxottica.testautomation.components.report.models;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Data
 public class TestStep implements Comparable<TestStep> {
@@ -34,6 +36,11 @@ public class TestStep implements Comparable<TestStep> {
 
         this.number = number;
         this.status = status;
+    }
+
+    public void setNote(String note, Logger logger) {
+        this.note = note;
+        logger.warn(note);
     }
 
     @Override

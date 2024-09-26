@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import static com.luxottica.testautomation.constants.Label.ORDER_HISTORY_FULL_DETAILS;
+import static com.luxottica.testautomation.constants.Label.*;
+import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -53,17 +54,20 @@ public class AccountTest extends BaseTest {
 
             logger.trace("Clicking on the Search button");
             Locator searchButton = page.locator("//button[@data-element-id='OrderHistory_Search']").last();
-            searchButton.click();
+            page.waitForResponse("**/history**", () -> {
+                logger.trace("Clicking on the Search button");
+                searchButton.click();
+            });
 
             logger.trace("Waiting for the results to load and checking if the order is displayed");
             List<Locator> results = page.locator("//div[@data-element-id='OrderHistory_Results']").locator("div[class^='OrderHistoryOrder__Container']").all();
-            assertEquals(results.size(), 1);
+            assertEquals(1, results.size());
 
             return TestStatus.PASSED;
         });
     }
 
-    @Test(testName = "AT022", description = "Order Detail - Page structure")
+    @Test(testName = "AT023", description = "Order Detail - Page structure")
     public void orderHistoryPageStructure(Method method) {
 
         String testId = initTestAndReturnId(method);
@@ -89,7 +93,7 @@ public class AccountTest extends BaseTest {
             JsonObject jsonResponse = JsonParser.parseString(new String(response.body())).getAsJsonObject();
             jsonResponse = jsonResponse.getAsJsonObject("data");
             JsonArray results = jsonResponse.getAsJsonArray("histories");
-            String orderRef = jsonResponse.getAsJsonArray("histories").get(0).getAsJsonObject().get("reference").getAsString();
+            String orderRef = results.get(0).getAsJsonObject().get("reference").getAsString();
 
             logger.trace("Waiting for the results to load and checking if the order is displayed");
             assertEquals(results.size(), 1);
@@ -102,6 +106,55 @@ public class AccountTest extends BaseTest {
 
             logger.trace("Check if user lands on the order detail page");
             page.waitForURL(Pattern.compile(".*order-history.*"));
+
+            return TestStatus.PASSED;
+        });
+
+        executeStep(3, testId, () -> {
+
+            logger.trace("Verify that header is displayed");
+            Locator header = page.locator("#header");
+            assertThat(header).isVisible("Header is not displayed");
+
+            logger.trace("Verify that breadcrumb is displayed");
+            Locator breadcrumb = page.locator("div[class^='BreadcrumbSection__Section-']").first();
+            assertThat(breadcrumb).isVisible("Breadcrumb is not displayed");
+
+            logger.trace("Verify that page title is displayed");
+            Locator pageTitle = page.locator("div[class^='MyAccountPage__Header-']").first();
+            assertThat(pageTitle).isVisible("Page title is not displayed");
+
+            logger.trace("Verify that left shoulder navigation menu is displayed");
+            Locator leftShoulderNav = page.locator("div[class^='OrderDetailsSummary__BackCta-']").first();
+            assertThat(leftShoulderNav).isVisible("Left shoulder navigation menu is not displayed");
+
+            LabelComponent labelComponent = InjectionUtil.getBean(LabelComponent.class);
+
+            logger.trace("Verify that Export CSV button is displayed");
+            final String exportCsvLabel = labelComponent.getLabel(ORDER_DETAILS_EXPORT_CSV);
+            Locator exportCsvButton = page.locator(String.format("//button[contains(text(), '%s')]", exportCsvLabel)).first();
+            assertThat(exportCsvButton).isVisible("Export CSV button is not displayed");
+
+            logger.trace("Verify that Print button is displayed");
+            final String printLabel = labelComponent.getLabel(ORDER_DETAILS_PRINT);
+            Locator printButton = page.locator(String.format("//button[contains(text(), '%s')]", printLabel)).first();
+            assertThat(printButton).isVisible("Print button is not displayed");
+
+            logger.trace("Verify order number title is displayed");
+            Locator orderNumberTitle = page.locator("div[class^='OrderDetailsSummary__Title-']").first();
+            assertThat(orderNumberTitle).isVisible("Order number title is not displayed");
+
+            logger.trace("Verify that \"Your order\" section is displayed");
+            Locator yourOrderSection = page.locator("div[class^='OrderSummaryHeader__BoxSection-']").first();
+            assertThat(yourOrderSection).isVisible("Your order section is not displayed");
+
+            logger.trace("Verify that \"Order details\" section is displayed");
+            Locator orderDetailsSection = page.locator("div[class^='OrderDetailsTable__Section-']").first();
+            assertThat(orderDetailsSection).isVisible("Order details section is not displayed");
+
+            logger.trace("Verify that footer is displayed");
+            Locator footer = page.locator("#sticky-footer");
+            assertThat(footer).isVisible("Footer is not displayed");
 
             return TestStatus.PASSED;
         });

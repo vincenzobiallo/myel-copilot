@@ -1,222 +1,249 @@
 {
 	"tests": [
 		{
-		  "id": "AT001",
-		  "weekId": "",
-		  "coreId": "ID001",
-		  "testName": "Cookie Acceptance Banner",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT001",
+			"weekId": "",
+			"coreId": "ID001",
+			"testName": "Cookie Acceptance Banner",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT002",
-		  "weekId": "",
-		  "coreId": "ID005",
-		  "testName": "HomePage Parts are Visible",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT002",
+			"weekId": "",
+			"coreId": "ID005",
+			"testName": "HomePage Parts are Visible",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT003",
-		  "weekId": "",
-		  "coreId": "ID006",
-		  "testName": "Brands Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT003",
+			"weekId": "",
+			"coreId": "ID006",
+			"testName": "Brands Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT004",
-		  "weekId": "",
-		  "coreId": "ID007",
-		  "testName": "Categories Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT004",
+			"weekId": "",
+			"coreId": "ID007",
+			"testName": "Categories Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT005",
-		  "weekId": "",
-		  "coreId": "ID008",
-		  "testName": "Sunglasses Sub-Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT005",
+			"weekId": "",
+			"coreId": "ID008",
+			"testName": "Sunglasses Sub-Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT006",
-		  "weekId": "",
-		  "coreId": "ID009",
-		  "testName": "Eyeglasses Sub-Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT006",
+			"weekId": "",
+			"coreId": "ID009",
+			"testName": "Eyeglasses Sub-Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT007",
-		  "weekId": "",
-		  "coreId": "ID010",
-		  "testName": "Smartglasses Sub-Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT007",
+			"weekId": "",
+			"coreId": "ID010",
+			"testName": "Smartglasses Sub-Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT008",
-		  "weekId": "",
-		  "coreId": "ID011",
-		  "testName": "Goggles&Helmets Sub-Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT008",
+			"weekId": "",
+			"coreId": "ID011",
+			"testName": "Goggles&Helmets Sub-Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT009",
-		  "weekId": "",
-		  "coreId": "ID012",
-		  "testName": "Lenses Sub-Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT009",
+			"weekId": "",
+			"coreId": "ID012",
+			"testName": "Lenses Sub-Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT010",
-		  "weekId": "",
-		  "coreId": "ID013",
-		  "testName": "Eyewear Accessories Sub-Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT010",
+			"weekId": "",
+			"coreId": "ID013",
+			"testName": "Eyewear Accessories Sub-Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT011",
-		  "weekId": "",
-		  "coreId": "ID014",
-		  "testName": "AFA Sub-Menu",
-		  "impersonificate": true,
-		  "door": "0001026276",
-		  "storeIdentifier": "myl-it"
+			"id": "AT011",
+			"weekId": "",
+			"coreId": "ID014",
+			"testName": "AFA Sub-Menu",
+			"impersonificate": true,
+			"door": "0001026276",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT012",
-		  "weekId": "",
-		  "coreId": "ID015",
-		  "testName": "Service Menu",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT012",
+			"weekId": "",
+			"coreId": "ID015",
+			"testName": "Service Menu",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT013",
-		  "weekId": "",
-		  "coreId": "ID016",
-		  "testName": "Price policy",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT013",
+			"weekId": "",
+			"coreId": "ID016",
+			"testName": "Price policy",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT014",
-		  "weekId": "",
-		  "coreId": "ID019",
-		  "testName": "Check catalogue sorting",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT014",
+			"weekId": "",
+			"coreId": "ID019",
+			"testName": "Check catalogue sorting",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT015",
-		  "weekId": "",
-		  "coreId": "ID022",
-		  "testName": "Check Sunglasses PDP and add to cart",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT015",
+			"weekId": "",
+			"coreId": "ID022",
+			"testName": "Check Sunglasses PDP and add to cart",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT016",
-		  "weekId": "",
-		  "coreId": "ID027",
-		  "testName": "Check AFA PDP and add to cart",
-		  "impersonificate": true,
-		  "door": "0001026276",
-		  "storeIdentifier": "myl-it"
+			"id": "AT016",
+			"weekId": "",
+			"coreId": "ID027",
+			"testName": "Check AFA PDP and add to cart",
+			"impersonificate": true,
+			"door": "0001026276",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT017",
-		  "weekId": "",
-		  "coreId": "ID028",
-		  "testName": "Spare parts - Complete flow",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT017",
+			"weekId": "",
+			"coreId": "ID028",
+			"testName": "Spare parts - Complete flow",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT018",
-		  "weekId": "",
-		  "coreId": "ID031",
-		  "testName": "Process flow Standard warranty",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT018",
+			"weekId": "",
+			"coreId": "ID031",
+			"testName": "Process flow Standard warranty",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT019",
-		  "weekId": "",
-		  "coreId": "ID034",
-		  "testName": "Verify complete job process - non multifocal (single vision)",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it",
-          "additionalData": {
-            "selectedBrand": "Chanel",
-            "selectedSubBrand": "Sun",
-            "model": "0CH4189TQ",
-            "color": "C11287-Brown"
-          }
+			"id": "AT019",
+			"weekId": "",
+			"coreId": "ID034",
+			"testName": "Verify complete job process - non multifocal (single vision)",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it",
+			"additionalData": {
+				"selectedBrand": "Chanel",
+				"selectedSubBrand": "Sun",
+				"model": "0CH4189TQ",
+				"color": "C11287-Brown"
+			}
 		},
 		{
-		  "id": "AT020",
-		  "weekId": "",
-		  "coreId": "ID039",
-		  "testName": "Leonardo link",
-		  "impersonificate": false,
-		  "username": "user.0001026276.it",
-		  "storeIdentifier": "myl-it"
+			"id": "AT020",
+			"weekId": "",
+			"coreId": "ID039",
+			"testName": "Leonardo link",
+			"impersonificate": false,
+			"username": "user.0001026276.it",
+			"storeIdentifier": "myl-it"
 		},
 		{
-		  "id": "AT021",
-		  "weekId": "",
-		  "coreId": "ID041",
-		  "testName": "Search UPC",
-		  "impersonificate": true,
-		  "door": "0001001081",
-		  "storeIdentifier": "myl-it"
+			"id": "AT021",
+			"weekId": "",
+			"coreId": "ID041",
+			"testName": "Search UPC",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		},
-        {
-            "id": "AT022",
-            "coreId": "ID066",
-            "testName": "Order History - Filters",
-            "impersonificate": true,
-            "door": "0001001081",
-            "storeIdentifier": "myl-it",
-            "additionalData": {
-                "orderNumber": "0168199201"
-            }
-        },
-        {
-            "id": "AT023",
-            "coreId": "ID067",
-            "testName": "Order Detail - Page structure",
-            "impersonificate": true,
-            "door": "0001001081",
-            "storeIdentifier": "myl-it",
-            "additionalData": {
-                "orderNumber": "0168199201"
-            }
-        }
+		{
+			"id": "AT022",
+			"coreId": "ID066",
+			"testName": "Order History - Filters",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it",
+			"additionalData": {
+				"orderNumber": "0168199201"
+			}
+		},
+		{
+			"id": "AT023",
+			"coreId": "ID067",
+			"testName": "Order Detail - Page structure",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it",
+			"additionalData": {
+				"orderNumber": "0168199201"
+			}
+		},
+		{
+			"id": "AT024",
+			"coreId": "ID068",
+			"testName": "Stars navigation menu by brand - Stars Brand Pre PLP",
+			"impersonificate": true,
+			"door": "0001014726",
+			"storeIdentifier": "myl-it"
+		},
+		{
+			"id": "AT025",
+			"coreId": "ID070",
+			"testName": "PLP Stars - Check Macrofamily Chips",
+			"impersonificate": true,
+			"door": "0001014726",
+			"storeIdentifier": "myl-it",
+			"additionalData": {
+				"macrofamily": "Best Stars"
+			}
+		},
+		{
+			"id": "AT026",
+			"coreId": "ID071",
+			"testName": "PDP - Sku stars",
+			"impersonificate": true,
+			"door": "0001014726",
+			"storeIdentifier": "myl-it"
+		}
 	],
 	"stores": [
 		{
@@ -224,15 +251,16 @@
 			"storeIdentifier": "myl-it",
 			"storeCode": 10156,
 			"storeSlug": "it",
-			"locale": "it-IT"
+			"locale": "it-IT",
+			"langId": -4
 		},
 		{
 			"countryName": "United States",
 			"storeIdentifier": "myl-us",
 			"storeCode": 10152,
 			"storeSlug": "us",
-			"locale": "en-US"
+			"locale": "en-US",
+			"langId": -1
 		}
 	]
 }
-  

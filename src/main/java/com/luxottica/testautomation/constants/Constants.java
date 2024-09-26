@@ -6,6 +6,8 @@ public class Constants {
     public static final String SESSION_URL = "myel.sessionUrl";
     public static final String PERSONIFICATION_URL = "myel.personificationUrl";
     public static final String URL_PRECART = "myel.precartUrl";
+
+    public static final String COOKIE = "Cookie";
     public static final String COOKIE_SESSION_ID = "myl_frontoffice_sessionid";
 
     public static class USER_ATTRIBUTES {

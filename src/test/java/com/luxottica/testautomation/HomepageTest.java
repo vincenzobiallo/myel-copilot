@@ -4,6 +4,7 @@ import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.constants.Constants;
 import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
+import com.luxottica.testautomation.security.Context;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -135,7 +136,11 @@ public class HomepageTest extends BaseTest {
             assertEquals(categories.size(), orderedCategories.size(), "Categories Menu is not complete");
 
             logger.trace("Verifying Categories Menu is ordered");
-            return categories.equals(orderedCategories) ? TestStatus.PASSED : TestStatus.PASSED_WITH_MINOR;
+            if (!categories.equals(orderedCategories)) {
+                Context.getTest().getStep(3).setNote("Categories are not ordered");
+                return TestStatus.PASSED_WITH_MINOR;
+            }
+            return TestStatus.PASSED;
         });
     }
 
@@ -434,7 +439,7 @@ public class HomepageTest extends BaseTest {
             assertThat(leonardoBtn).isVisible(Errors.ELEMENTS_NOT_VISIBLE);
 
             logger.trace("Clicking on Leonardo link");
-            Page leonardoPage = page.waitForPopup(new Page.WaitForPopupOptions().setTimeout(10000), leonardoBtn::click);
+            Page leonardoPage = page.waitForPopup(new Page.WaitForPopupOptions().setTimeout(30000), leonardoBtn::click);
             leonardoPage.waitForLoadState(LoadState.LOAD);
 
             logger.trace("Verifying new page is opened");

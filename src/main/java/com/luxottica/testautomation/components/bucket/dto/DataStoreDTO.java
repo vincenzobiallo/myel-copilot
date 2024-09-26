@@ -16,5 +16,6 @@ public class DataStoreDTO {
     private Integer storeCode;
     private String storeSlug;
     private String locale;
+    private Integer langId;
 
 }

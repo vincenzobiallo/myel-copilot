@@ -19,7 +19,7 @@ public class MyelStore {
     private final String storeCode;
     private final String storeSlug;
     private final String locale;
-
+    private final String langId;
 
     public static MyelStore fromStoreIdentifier(String storeIdentifier) {
         return STORES.stream()

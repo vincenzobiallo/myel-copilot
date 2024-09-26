@@ -8,6 +8,10 @@ myel:
     sessionUrl: "/fo-bff/admin/current-session"
     personificationUrl: "/fo-bff/api/priv/v1/{storeIdentifier}/{locale}/personification/customers"
     precart: "/fo-bff/api/priv/v1/{storeIdentifier}/{locale}/precart"
+search:
+  baseUrl: "https://search.myluatlive.luxottica.com"
+  endpoints:
+    findProductsByCategoryCarousel: "/search/resources/store/{storeIdentifier}/productview/byCategory/{categoryId}?profileName=LX_findProductsByCategoryCarousel"
 labels:
     endpoint: 'https://api-hub-prod.luxottica.com/translations/getPrivateTranslations?project=MYEL - Front Office&isExtended=false&language={locale}'
     header:

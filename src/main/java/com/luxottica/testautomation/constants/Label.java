@@ -42,4 +42,13 @@ public class Label {
 
     public static final String SEARCH_SORRY_NO_RESULTS = "SEARCH_SORRY_NO_RESULTS";
     public static final String ORDER_HISTORY_FULL_DETAILS = "ORDER_HISTORY_FULL_DETAILS";
+    public static final String ORDER_DETAILS_EXPORT_CSV = "ORDER_DETAILS_EXPORT_CSV";
+    public static final String ORDER_DETAILS_PRINT = "ORDER_DETAILS_PRINT";
+
+    public static final String MENU_BRAND_STARS = "MENU_BRAND_STARS";
+    public static final String MENU_BRAND_OTHERS = "MENU_BRAND_OTHERS";
+    public static final String STARS_LABEL = "STARS_LABEL";
+
+    public static final String VIEW_ALL = "VIEW_ALL";
+
 }

@@ -76,6 +76,7 @@ public class BucketComponentImpl implements BucketComponent {
                             .storeCode(String.valueOf(store.getStoreCode()))
                             .storeSlug(store.getStoreSlug())
                             .locale(store.getLocale())
+                            .langId(String.valueOf(store.getLangId()))
                             .build()));
         } catch (IOException e) {
             logger.error("Failed to load business test references!", e);

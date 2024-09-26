@@ -5,6 +5,7 @@ import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.components.labels.LabelComponentImpl;
 import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
+import com.luxottica.testautomation.exceptions.MySkipException;
 import com.luxottica.testautomation.models.RXPrescriptionAttribute;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.luxottica.testautomation.utils.PlaywrightTestUtils;
@@ -133,6 +134,10 @@ public class RXTest extends BaseTest {
             page.waitForLoadState(LoadState.NETWORKIDLE);
 
             return TestStatus.PASSED;
+        });
+
+        executeStep(3, testId, () -> {
+            throw new MySkipException("Not implemented yet");
         });
     }
 

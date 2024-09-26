@@ -153,13 +153,13 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         }
 
         try {
-            logger.info("Executing step {} for test {}", number, test.getId());
+            logger.info("\tExecuting step {} for test {}", number, test.getId());
             TestStatus result = function.apply();
             step.setStatus(result);
-            logger.info("Step {} for test {} executed with status {}", number, test.getId(), result);
+            logger.info("\tStep {} for test {} executed with status {}", number, test.getId(), result);
         } catch (TimeoutError e) {
             step.setStatus(TestStatus.FAILED);
-            step.setNote("Timeout! Is the step waiting for an element that is not present?");
+            step.setNote("Timeout! This step failed because it wanted to interact with an element that was not still present on the page");
             logger.warn("Timeout executing step {} for test {}!", number, test.getId());
             test.setFailed(Boolean.TRUE);
             throw new Error(e);
@@ -170,8 +170,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
             test.setFailed(Boolean.TRUE);
             throw e;
         } catch (SkipException skipException) {
-            logger.warn(skipException.getMessage());
-            step.setNote(skipException.getMessage());
+            step.setNote(skipException.getMessage(), logger);
             step.setStatus(TestStatus.TO_BE_RETESTED);
             if (skipException instanceof MySkipException mySkipException) {
                 if (mySkipException.makeScreenshot()) {

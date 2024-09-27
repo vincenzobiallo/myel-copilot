@@ -126,6 +126,10 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
 
         BucketComponent bucketComponent = InjectionUtil.getBean(BucketComponent.class);
         DataTestDTO bucket = bucketComponent.getBucketData(test.testName());
+        if (bucket == null) {
+            logger.warn("Test {} is not present in {} test execution. Skipping..", test.testName(), PlaywrightTestUtils.getReportType().name());
+            throw new SkipException(String.format("Test %s is not present in %s test execution. Skipping..", test.testName(), PlaywrightTestUtils.getReportType().name()));
+        }
 
         return CopilotDTO.builder()
                 .door(bucket.getDoor())

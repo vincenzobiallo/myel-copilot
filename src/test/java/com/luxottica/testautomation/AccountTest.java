@@ -18,20 +18,24 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Response;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.RequestOptions;
+import org.assertj.core.util.Files;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import static com.luxottica.testautomation.constants.Label.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.*;
 
 public class AccountTest extends BaseTest {
 
@@ -155,6 +159,55 @@ public class AccountTest extends BaseTest {
             logger.trace("Verify that footer is displayed");
             Locator footer = page.locator("#sticky-footer");
             assertThat(footer).isVisible("Footer is not displayed");
+
+            return TestStatus.PASSED;
+        });
+    }
+
+    @Test(testName = "AT029", description = "Massive order upload")
+    public void massiveOrderUpload(Method method) {
+
+        String testId = initTestAndReturnId(method);
+        String fileBased64 = getAdditionalData("fileBased64", String.class);
+        AtomicReference<File> fileToUpload = new AtomicReference<>();
+
+        executeStep(1, testId, () -> {
+
+            byte[] csv = Base64.getDecoder().decode(fileBased64);
+            File file = Files.newTemporaryFile();
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                fos.write(csv);
+            }
+
+            if (file.getTotalSpace() == 0) {
+                throw new IllegalArgumentException("File is empty");
+            }
+
+            fileToUpload.set(file);
+            assertNotNull("File to upload is not set", fileToUpload.get());
+
+            page.navigate(getURL() + "/account/order-upload");
+            return TestStatus.PASSED;
+        });
+
+        executeStep(2, testId, () -> {
+
+            logger.trace("Uploading the file");
+            Locator fileInput = page.locator("input[id='hidden-upload']");
+            fileInput.setInputFiles(fileToUpload.get().toPath());
+
+            logger.trace("Checking if the file is uploaded");
+            Locator uploadedFile = page.locator("//div[@direction='column']/div[contains(@class, 'Chip')]").first();
+            assertThat(uploadedFile).isVisible("File is not uploaded");
+
+            LabelComponent labelComponent = InjectionUtil.getBean(LabelComponent.class);
+            final String confirmLabel = labelComponent.getLabel(FILE_INPUT_UPLOAD_BUTTON);
+            Locator confirmButton = page.locator("//button[contains(text(), '" + confirmLabel + "')]").first();
+
+            Response response = page.waitForResponse("**/upload", () -> {
+                logger.trace("Confirming the upload");
+                confirmButton.click();
+            });
 
             return TestStatus.PASSED;
         });

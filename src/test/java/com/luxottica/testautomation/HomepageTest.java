@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 import static com.luxottica.testautomation.constants.Label.COOKIE_POLICY_BANNER_MESSAGE;
 import static com.luxottica.testautomation.constants.Label.SEARCH_SORRY_NO_RESULTS;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.*;
 
 public class HomepageTest extends BaseTest {
 
@@ -487,6 +486,33 @@ public class HomepageTest extends BaseTest {
                 logger.warn("No results found for UPC {}", upc);
                 return TestStatus.PASSED_WITH_MINOR;
             }
+
+            return TestStatus.PASSED;
+        });
+    }
+
+    @Test(testName = "AT028", description = "HTML Landing pages contents")
+    public void htmlLandingPagesContents(Method method) {
+
+        String testId = initTestAndReturnId(method);
+        executeStep(1, testId, () -> TestStatus.PASSED); // First step is always log with BO User (landInPage())
+
+        executeStep(2, testId, () -> {
+            logger.trace("Open Lenses Sub-Menu");
+            page.locator("span[data-element-id='MainNav_Products']").click();
+            assertThat(page.locator("div#menu-container>div")).isVisible();
+
+            Locator button = page.locator("button[data-element-id='MainNav_Products_Lenses']");
+            logger.trace("Clicking on Lenses Sub-Menu");
+            button.click();
+            assertThat(page.locator("div[class^='CategoryItem__Submenu']").first()).isVisible();
+
+            Locator firstColumn = page.locator("div[class^='LensesColumnEssilor_']").first();
+            Locator firstLink = firstColumn.locator("a").first();
+            firstLink.click();
+            page.waitForLoadState(LoadState.NETWORKIDLE);
+
+            assertTrue(page.url().contains("/digital-catalog"));
 
             return TestStatus.PASSED;
         });

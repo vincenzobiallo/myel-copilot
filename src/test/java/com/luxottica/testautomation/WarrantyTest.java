@@ -9,7 +9,6 @@ import com.luxottica.testautomation.exceptions.MySkipException;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.LoadState;
-import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
@@ -19,7 +18,7 @@ import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.ass
 
 public class WarrantyTest extends BaseTest {
 
-    @Test(testName = "AT016", description = "Process flow Standard warranty")
+    @Test(testName = "AT018", description = "Process flow Standard warranty")
     public void processFlowStandardWarranty(Method method) {
 
         String testId = initTestAndReturnId(method);

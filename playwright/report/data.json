@@ -243,6 +243,33 @@
 			"impersonificate": true,
 			"door": "0001014726",
 			"storeIdentifier": "myl-it"
+		},
+		{
+			"id": "AT027",
+			"coreId": "ID072",
+			"testName": "Cart - Sku stars",
+			"impersonificate": true,
+			"door": "0001014726",
+			"storeIdentifier": "myl-it"
+		},
+		{
+			"id": "AT028",
+			"coreId": "ID083",
+			"testName": "HTML Landing pages contents",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
+		},
+		{
+			"id": "AT029",
+			"coreId": "ID084",
+			"testName": "Massive order upload",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it",
+			"additionalData": {
+				"fileBased64": ""
+			}
 		}
 	],
 	"stores": [

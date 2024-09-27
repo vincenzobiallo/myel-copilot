@@ -133,7 +133,7 @@
 				<version>3.0.0-M7</version>
 				<configuration>
 					<systemPropertyVariables>
-						<playwright.browser.headless>true</playwright.browser.headless>
+						<playwright.browser.headless>false</playwright.browser.headless>
 						<playwright.defaultTimeout>90000</playwright.defaultTimeout>
 						<playwright.reportType>CORE</playwright.reportType>
 					</systemPropertyVariables>

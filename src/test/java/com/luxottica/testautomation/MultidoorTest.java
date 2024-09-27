@@ -29,7 +29,7 @@ public class MultidoorTest extends BaseTest {
     public void processFlowStandardWarranty(Method method) {
 
         String testId = initTestAndReturnId(method);
-        String plpPage = getURL() + "/plp/frames?PRODUCT_CATEGORY_FILTER=Sunglasses&PRODUCT_CATEGORY_FILTER=Sunglasses+Kids";
+        String plpPage = getURL() + "/plp/frames?PRODUCT_CATEGORY_FILTER=Sunglasses";
         page.navigate(plpPage);
 
         String categoryId = "3074457345616679685";

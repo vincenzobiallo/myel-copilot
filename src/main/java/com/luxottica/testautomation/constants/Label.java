@@ -50,5 +50,6 @@ public class Label {
     public static final String STARS_LABEL = "STARS_LABEL";
 
     public static final String VIEW_ALL = "VIEW_ALL";
+    public static final String FILE_INPUT_UPLOAD_BUTTON = "FILE_INPUT_UPLOAD_BUTTON";
 
 }

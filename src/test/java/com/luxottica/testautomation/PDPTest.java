@@ -104,7 +104,7 @@ public class PDPTest extends BaseTest {
         AtomicReference<String> upcValue = new AtomicReference<>();
         executeStep(3, testId, () -> {
             logger.trace("Increasing the quantity of the product");
-            Locator increaseQuantity = page.locator("//div[contains(@class, 'PDPListAFA')]//div[contains(@class, 'AddSizeAFA')]//input[contains(@class, 'AddSizeAFA')]").first();
+            Locator increaseQuantity = page.locator("span[class^='AddSizeAFA__AddSizeContainer-']").locator("input").first();
             increaseQuantity.fill("1");
 
             logger.trace("Extracting the UPC value from request triggered by adding the product to the cart");

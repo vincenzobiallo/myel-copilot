@@ -1,6 +1,8 @@
 package com.luxottica.testautomation;
 
 import com.google.gson.JsonParser;
+import com.luxottica.testautomation.components.cart.CartService;
+import com.luxottica.testautomation.components.cart.dto.CartDTO;
 import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.security.Context;
@@ -9,6 +11,9 @@ import com.luxottica.testautomation.utils.PlaywrightTestUtils;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Request;
 import com.microsoft.playwright.options.LoadState;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
@@ -16,6 +21,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.luxottica.testautomation.constants.Label.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
@@ -182,6 +188,7 @@ public class StarsTest extends BaseTest {
     public void pdpSkuStars(Method method) {
 
         String testId = initTestAndReturnId(method);
+        AtomicReference<String> selectedMacrofamily = new AtomicReference<>();
 
         executeStep(1, testId, () -> {
 
@@ -208,13 +215,19 @@ public class StarsTest extends BaseTest {
             final String showAllLabel = labelComponent.getLabel(VIEW_ALL);
             Locator showAllButton = page.locator("//button[contains(text(), '" + showAllLabel + "')]").first();
             showAllButton.click();
-
             assertTrue(page.url().contains("/plp-stars/"));
+
+            logger.trace("Extracting the selected macrofamily");
+            UriComponents components = UriComponentsBuilder.fromUriString(page.url()).build();
+            MultiValueMap<String, String> queryParams = components.getQueryParams();
+            assertTrue("PRODUCT_CATEGORY_FILTER is not present in the URL", queryParams.containsKey("PRODUCT_CATEGORY_FILTER"));
+            selectedMacrofamily.set(queryParams.getFirst("PRODUCT_CATEGORY_FILTER"));
 
             logger.trace("Opening the first product");
             Locator firstTile = page.locator("//button[contains(@class, 'TileSku')]").first();
             assertThat(firstTile).isVisible("No products found in the PLP");
             firstTile.click();
+            page.waitForLoadState(LoadState.NETWORKIDLE);
 
             assertTrue(page.url().contains("/pdp/"));
 
@@ -266,12 +279,11 @@ public class StarsTest extends BaseTest {
         });
 
         executeStep(4, testId, () -> {
-            logger.trace("Adding first product to the cart");
-            Locator firstProduct = page.locator("div[data-element-id='MainBox']").first();
-            Locator firstStarSize = firstProduct.locator("div[class^='AddSize__SizeContainer-']").all()
-                    .stream().filter(size -> PlaywrightTestUtils.containClass(size, "add-size-stars")).findFirst().orElseThrow();
 
-            Locator input = firstStarSize.locator("input").first();
+            page.waitForLoadState(LoadState.NETWORKIDLE);
+
+            logger.trace("Adding first product to the cart");
+            Locator input = page.locator("//div[contains(@class, 'PDPListContent')]//input[contains(@class, 'AddSize')]").first();
             input.fill("1");
 
             logger.trace("Extracting the UPC value from request triggered by adding the product to the cart");
@@ -279,15 +291,48 @@ public class StarsTest extends BaseTest {
                 Locator addToCart = page.locator("//button[@data-element-id='AddToCart']");
                 addToCart.scrollIntoViewIfNeeded();
                 addToCart.click();
+                page.waitForLoadState(LoadState.NETWORKIDLE);
             });
-            page.waitForLoadState(LoadState.NETWORKIDLE);
 
             String upc = JsonParser.parseString(request.postData()).getAsJsonObject().get("orderItem").getAsJsonArray()
                     .get(0).getAsJsonObject().get("xitem_upc").getAsString();
             logger.debug("UPC value: {}", upc);
 
+            logger.trace("Checking if the product is in the cart in STARS category");
+            CartService cartService = InjectionUtil.getBean(CartService.class);
+            CartDTO cart = cartService.getCart(Context.getPlaywright(), getUser());
+
+            assertTrue(cart.getContent().get(selectedMacrofamily.get()).stream().anyMatch(content -> content.getUpc().equals(upc)));
+
             return TestStatus.PASSED;
         });
 
+    }
+
+    @Test(testName = "AT027", description = "Cart - Sku stars")
+    public void cartSkuStars(Method method) {
+
+        String testId = initTestAndReturnId(method);
+
+        executeStep(1, testId, () -> {
+            page.navigate(getURL() + "/cart");
+            return TestStatus.PASSED;
+        });
+
+        executeStep(2, testId, () -> {
+
+            logger.trace("Checking if cart contains at least one star product");
+
+            List<Locator> tileHeaders = page.locator("div[class^='CartTile__TileHeader-']").all();
+            Optional<Locator> starProduct = tileHeaders.stream()
+                    .filter(header -> PlaywrightTestUtils.containClass(header, "cart-tile-stars")).findAny();
+
+            if (starProduct.isPresent()) {
+                return TestStatus.PASSED;
+            } else {
+                Context.getTest().getStep(2).setNote("No star product found in the cart", logger);
+                return TestStatus.TO_BE_RETESTED;
+            }
+        });
     }
 }

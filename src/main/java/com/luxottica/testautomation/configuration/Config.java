@@ -19,8 +19,12 @@ public class Config {
     private String personificationUrl;
     @Value("${myel.endpoints.precart}")
     private String precart;
-    @Value("${myel.endpoints.multidoor}")
-    private String multidoor;
+    @Value("${myel.endpoints.doors}")
+    private String doors;
+    @Value("${myel.endpoints.usercontext}")
+    private String userContext;
+    @Value("${myel.endpoints.facets}")
+    private String facets;
 
     @Bean
     public static InjectionUtil injectionUtil() {

@@ -1,104 +1,103 @@
 package com.luxottica.testautomation;
 
-import com.luxottica.testautomation.components.report.enums.TestStatus;
-
 import com.luxottica.testautomation.configuration.Config;
-import com.luxottica.testautomation.configuration.SearchConfig;
-import com.luxottica.testautomation.dto.MultidoorRequestDTO;
-import com.luxottica.testautomation.models.MyelStore;
+import com.luxottica.testautomation.constants.Constants;
+import com.luxottica.testautomation.dto.multidoor.*;
+import com.luxottica.testautomation.exceptions.MySkipException;
 import com.luxottica.testautomation.security.Context;
-import com.luxottica.testautomation.utils.*;
-import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.RequestOptions;
-import org.apache.logging.log4j.util.Strings;
-import org.springframework.http.HttpStatus;
+import com.luxottica.testautomation.security.dto.BFFResponse;
+import com.luxottica.testautomation.utils.InjectionUtil;
+
+import org.springframework.http.HttpMethod;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeMethod;
 
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+public abstract class MultidoorTest extends BaseTest {
 
-public class MultidoorTest extends BaseTest {
+    @BeforeMethod
+    @Override
+    void createContextAndPage(Method method) {
+        super.createContextAndPage(method);
 
-    //@Test(testName = "AT016", description = "Process flow Standard warranty")
-    public void processFlowStandardWarranty(Method method) {
+        List<DoorDTO> selectedDoors = getSelectedDoors();
 
-        String testId = initTestAndReturnId(method);
-        String plpPage = getURL() + "/plp/frames?PRODUCT_CATEGORY_FILTER=Sunglasses";
-        page.navigate(plpPage);
+        if (selectedDoors.size() == 1) {
+            logger.debug("Selecting two doors for user {}", Context.getUser().getUsername());
+            List<DoorDTO> availableDoors = getDoorGroup();
+            if (availableDoors.size() < 2) {
+                throw new MySkipException("Not enough doors available for user " + Context.getUser().getUsername());
+            }
+            boolean success = selectDoors(List.of(
+                    MultidoorRequestDataDTO.builder().customer(availableDoors.get(0).getOrgentityName()).selected(true).build(),
+                    MultidoorRequestDataDTO.builder().customer(availableDoors.get(1).getOrgentityName()).selected(true).build()
+            ));
 
-        String categoryId = "3074457345616679685";
-        MyelStore myelStore = MyelStore.fromStoreIdentifier(getUser().getStore());
-        String langId = myelStore.getLangId();
-        Integer pageSize = 100;
-        Integer pageNumber = 1;
-        Set<String> doors = new LinkedHashSet<>();
-        doors.add("0001001081");
-        doors.add("0001509900");
-
-        executeStep(1, testId, () -> {
-
-            startMultidoor();
-            SearchConfig searchConfig = InjectionUtil.getBean(SearchConfig.class);
-
-            String url = searchConfig.getBaseUrl().concat(searchConfig.getFindProductsByCategoryCarousel())
-                    .replace("{storeIdentifier}", myelStore.getStoreCode())
-                    .replace("{categoryId}", categoryId);
-
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                    .queryParam("activeDoorId", "0001001081")
-                    .queryParam("langId", langId)
-                    .queryParam("pageSize", pageSize)
-                    .queryParam("pageNumber", pageNumber)
-                    .queryParam("doorId", doors);
-
-            url = builder.toUriString();
-            BFFRequest bffRequest = new BFFRequest(Map.of(
-                            "WCToken", Strings.EMPTY,
-                            "WCTrustedToken", Strings.EMPTY));
-            BFFResponse bffResponse = bffRequest.get(url);
-
-            logger.debug("BFF Status: {}", bffResponse.getStatus());
-            logger.debug("BFF Response: {}", bffResponse.toJsonObject());
-
-            return TestStatus.PASSED;
-        });
+            Assert.assertTrue(success, "Failed to select doors for user " + Context.getUser().getUsername());
+        }
     }
 
-    private boolean startMultidoor() {
+    @AfterClass
+    @Override
+    void closeBrowser() {
+        List<DoorDTO> selectedDoors = getSelectedDoors();
+        if (selectedDoors.size() > 1) {
+            boolean success = selectDoors(List.of(
+                    MultidoorRequestDataDTO.builder().customer(selectedDoors.get(0).getOrgentityName()).selected(false).build()
+            ));
+
+            Assert.assertTrue(success, "Failed to deselect doors for user " + Context.getUser().getUsername());
+        }
+        super.closeBrowser();
+    }
+
+    protected List<DoorDTO> getSelectedDoors() {
         Config config = InjectionUtil.getBean(Config.class);
-        String url = config.getBaseUrl().concat(config.getMultidoor());
+        BFFResponse bffResponse = getBffClient().setRequest(
+                config.getUserContext()
+                    .replace(Constants.ENDPOINTS.STORE_IDENTIFIER, getUser().getStore()),
+                HttpMethod.GET
+                );
 
-        APIRequestContext context = RequestUtils.buildContext(Context.getPlaywright(), getUser().getUsername());
+        UserContextResponseDTO response = bffResponse.getData(UserContextResponseDTO.class);
+        List<DoorDTO> selectedDoors = response.getMultiDoors();
+        logger.info("{} doors selected for user {}", selectedDoors.size(), response.getUsername());
 
-        url = url.replace("{storeIdentifier}", getUser().getStore()).replace("{locale}", getUser().getLocale());
+        return selectedDoors;
+    }
 
-        MultidoorRequestDTO payload = MultidoorRequestDTO.builder()
-                .doors(new ArrayList<>(List.of(
-                        MultidoorRequestDTO.MultdoorRequestDataDTO.builder()
-                                .customer("0001001081")
-                                .selected(true)
-                                .build(),
-                        MultidoorRequestDTO.MultdoorRequestDataDTO.builder()
-                                .customer("0001509900")
-                                .selected(true)
-                                .build()
-                )))
-                .build();
+    protected List<DoorDTO> getDoorGroup() {
 
-        APIResponse response = context.post(url,
-                RequestOptions.create()
-                        .setData(payload)
-                        .setHeader("Content-Type", "application/json")
-                        .setHeader("Accept", "application/json"));
+        Config config = InjectionUtil.getBean(Config.class);
+        BFFResponse bffResponse = getBffClient().setRequest(
+                config.getDoors()
+                    .replace(Constants.ENDPOINTS.STORE_IDENTIFIER, getUser().getStore())
+                    .replace(Constants.ENDPOINTS.LOCALE, getUser().getLocale()),
+                HttpMethod.GET,
+                new LinkedMultiValueMap<>(Map.of(
+                        "size", List.of("10"),
+                        "page", List.of("1")))
+                );
 
-        logger.debug("Multidoor HTTP Status: {}", response.status());
+        MultidoorListResponseDTO response = bffResponse.getData(MultidoorListResponseDTO.class);
+        logger.info("{} doors found for user {}", response.getTotalDoors(), getUser().getUsername());
+        return response.getDoors();
+    }
 
-        return Objects.requireNonNull(HttpStatus.resolve(response.status())).is2xxSuccessful();
+    protected boolean selectDoors(List<MultidoorRequestDataDTO> selectedDoors) {
+        Config config = InjectionUtil.getBean(Config.class);
+        BFFResponse bffResponse = getBffClient().setRequest(
+                config.getDoors()
+                        .replace(Constants.ENDPOINTS.STORE_IDENTIFIER, getUser().getStore())
+                        .replace(Constants.ENDPOINTS.LOCALE, getUser().getLocale()),
+                HttpMethod.POST,
+                MultidoorRequestDTO.builder().doors(selectedDoors).build());
+
+        return bffResponse.getStatus().is2xxSuccessful();
     }
 }

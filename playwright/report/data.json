@@ -270,6 +270,22 @@
 			"additionalData": {
 				"fileBased64": ""
 			}
+		},
+		{
+			"id": "AT030",
+			"coreId": "ID047",
+			"testName": "Multidoor Catalogue resulting from merge",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
+		},
+		{
+			"id": "AT031",
+			"coreId": "ID051",
+			"testName": "Multidoor Cart visualization",
+			"impersonificate": true,
+			"door": "0001001081",
+			"storeIdentifier": "myl-it"
 		}
 	],
 	"stores": [

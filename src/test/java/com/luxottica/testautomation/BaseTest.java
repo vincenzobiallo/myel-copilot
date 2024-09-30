@@ -21,6 +21,7 @@ import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.components.report.models.TestCase;
 import com.luxottica.testautomation.components.report.models.TestStep;
 import com.luxottica.testautomation.constants.Constants;
+import com.luxottica.testautomation.security.BFFClient;
 import com.luxottica.testautomation.security.Context;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.luxottica.testautomation.utils.PlaywrightTestUtils;
@@ -30,6 +31,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.SkipException;
@@ -52,6 +54,9 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
     protected Page page;
 
     private User user;
+
+    @Autowired
+    private BFFClient bffClient;
 
     @BeforeClass
     void launchBrowser() {

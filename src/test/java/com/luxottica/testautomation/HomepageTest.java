@@ -484,6 +484,7 @@ public class HomepageTest extends BaseTest {
             logger.trace("Verifying Search Results are not empty");
             if (noResults.isVisible()) {
                 logger.warn("No results found for UPC {}", upc);
+                Context.getTest().getStep(2).setNote("No results found for UPC " + upc);
                 return TestStatus.PASSED_WITH_MINOR;
             }
 

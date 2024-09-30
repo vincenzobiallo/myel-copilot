@@ -1,35 +1,21 @@
 package com.luxottica.testautomation;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
-import com.luxottica.testautomation.configuration.Config;
-import com.luxottica.testautomation.dto.MultidoorRequestDTO;
-import com.luxottica.testautomation.security.Context;
 import com.luxottica.testautomation.utils.InjectionUtil;
-import com.luxottica.testautomation.utils.PlaywrightTestUtils;
-import com.luxottica.testautomation.utils.RequestUtils;
-import com.microsoft.playwright.APIRequestContext;
-import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Response;
-import com.microsoft.playwright.options.LoadState;
-import com.microsoft.playwright.options.RequestOptions;
 import org.assertj.core.util.Files;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.MultiValueMap;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 

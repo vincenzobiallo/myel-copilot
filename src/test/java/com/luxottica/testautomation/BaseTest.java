@@ -75,10 +75,18 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         Test test = method.getAnnotation(Test.class);
         CopilotDTO pilot = getDoorToUse(method);
 
-        if (pilot.isImpersonate()) {
-            Context.setUser(UserUtils.getUserByWorker(browser));
-        } else {
-            Context.setUser(UserUtils.getUserByUsername(browser, pilot.getDoor()));
+        try {
+            if (pilot.isImpersonate()) {
+                Context.setUser(UserUtils.getUserByWorker(browser));
+            } else {
+                Context.setUser(UserUtils.getUserByUsername(browser, pilot.getDoor()));
+            }
+        } catch (Exception e) {
+            ReportComponent report = InjectionUtil.getBean(ReportComponent.class);
+            TestStep firstStep = report.getTests().get(getBusinessTestId(test)).getStep(1);
+            firstStep.setNote("Error while authenticating user: " + pilot.getDoor(), logger);
+            firstStep.setStatus(TestStatus.FAILED);
+            throw new RuntimeException(e);
         }
 
         this.user = Context.getUser();

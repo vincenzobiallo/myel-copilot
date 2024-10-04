@@ -5,17 +5,22 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
+import com.luxottica.testautomation.security.Context;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Response;
+import com.microsoft.playwright.options.LoadState;
 import org.assertj.core.util.Files;
+import org.springframework.http.HttpStatus;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.util.Base64;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
@@ -83,7 +88,6 @@ public class AccountTest extends BaseTest {
             JsonObject jsonResponse = JsonParser.parseString(new String(response.body())).getAsJsonObject();
             jsonResponse = jsonResponse.getAsJsonObject("data");
             JsonArray results = jsonResponse.getAsJsonArray("histories");
-            String orderRef = results.get(0).getAsJsonObject().get("reference").getAsString();
 
             logger.trace("Waiting for the results to load and checking if the order is displayed");
             assertEquals(results.size(), 1);
@@ -154,15 +158,23 @@ public class AccountTest extends BaseTest {
     public void massiveOrderUpload(Method method) {
 
         String testId = initTestAndReturnId(method);
-        String fileBased64 = getAdditionalData("fileBased64", String.class);
+        LabelComponent labelComponent = InjectionUtil.getBean(LabelComponent.class);
+
+        Map<String, String> fileStruct = (Map<String, String>) getAdditionalData("file", Map.class);
+
         AtomicReference<File> fileToUpload = new AtomicReference<>();
 
         executeStep(1, testId, () -> {
 
-            byte[] csv = Base64.getDecoder().decode(fileBased64);
-            File file = Files.newTemporaryFile();
+            String extension = fileStruct.get("extension");
+            String data = fileStruct.get("data");
+
+            byte[] fileBased64 = Base64.getDecoder().decode(data);
+
+            File file = new File("massiveOrderUpload." + extension);
+            file.deleteOnExit();
             try (FileOutputStream fos = new FileOutputStream(file)) {
-                fos.write(csv);
+                fos.write(fileBased64);
             }
 
             if (file.getTotalSpace() == 0) {
@@ -186,16 +198,78 @@ public class AccountTest extends BaseTest {
             Locator uploadedFile = page.locator("//div[@direction='column']/div[contains(@class, 'Chip')]").first();
             assertThat(uploadedFile).isVisible("File is not uploaded");
 
-            LabelComponent labelComponent = InjectionUtil.getBean(LabelComponent.class);
+            Locator uploadButtonContainer = page.locator("div[class^='OrderUploadStep1__UploadButtonContainer-']").first();
+
             final String confirmLabel = labelComponent.getLabel(FILE_INPUT_UPLOAD_BUTTON);
-            Locator confirmButton = page.locator("//button[contains(text(), '" + confirmLabel + "')]").first();
+            Locator confirmButton = uploadButtonContainer.locator("//button[contains(text(), '" + confirmLabel + "')]").first();
 
             Response response = page.waitForResponse("**/upload", () -> {
                 logger.trace("Confirming the upload");
                 confirmButton.click();
             });
 
+            Locator progressRefresh = page.locator("div[class='progress-container']").locator("svg").first();
+
+            logger.trace("Waiting for the upload to finish");
+            int MAX_SECONDS = 60;
+            int currentProgress = 0;
+            for (int i = 0; i < MAX_SECONDS; i++) {
+
+                if (currentProgress == 100) {
+                    break;
+                }
+
+                logger.debug("Current progress: {}", currentProgress);
+                Response massive = page.waitForResponse("**/massive", () -> {
+                    logger.trace("Refreshing the progress");
+                    progressRefresh.click();
+                });
+                HttpStatus status = HttpStatus.valueOf(massive.status());
+                if (status.isError()) {
+                    Context.getTest().getStep(2).setNote("Error during the upload: " + status.getReasonPhrase(), logger);
+                    return TestStatus.FAILED;
+                }
+                JsonObject jsonResponse = JsonParser.parseString(new String(massive.body())).getAsJsonObject();
+                String valueString= jsonResponse.get("data").getAsJsonObject().get("massiveOrders").getAsJsonArray().get(0).getAsJsonObject().get("progress").getAsString();
+                currentProgress = Integer.parseInt(valueString);
+                Thread.sleep(1000);
+            }
+
+            if (currentProgress != 100) {
+                Context.getTest().getStep(2).setNote("Upload did not finish in " + MAX_SECONDS + " seconds", logger);
+                Context.getTest().setFailed(true);
+                return TestStatus.TO_BE_RETESTED;
+            }
+
             return TestStatus.PASSED;
         });
+
+        final String step2TitleLabel = labelComponent.getLabel("ORDER_UPLOAD_STEP2_TITLE");
+        Locator step2Title = page.locator(String.format("//button[contains(text(), '%s')]", step2TitleLabel)).first();
+
+        executeStep(3, testId, () -> {
+            logger.trace("Checking if next step is displayed");
+            assertThat(step2Title).isVisible("Step 2 title is not displayed");
+            return TestStatus.PASSED;
+        });
+
+        executeStep(4, testId, () -> {
+            logger.trace("Clicking on the next step");
+            step2Title.click();
+            page.waitForLoadState(LoadState.NETWORKIDLE);
+
+            return TestStatus.PASSED;
+        });
+
+        executeStep(5, testId, () -> {
+            logger.trace("Checking if the upload is successful");
+            Locator message = page.locator("h2[class^='CustomText__Text-']").first();
+            final String refusedLabel = labelComponent.getLabel("CHECK_UPLOADS_ERRORROWS_TITLE");
+            assertThat(message).not().containsText(refusedLabel);
+
+            return TestStatus.PASSED;
+        });
+
+        fileToUpload.get().delete();
     }
 }

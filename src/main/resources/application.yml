@@ -4,10 +4,12 @@ logging:
 myel:
   baseUrl: "https://certi-my.essilorluxottica.com"
   endpoints:
-    multidoor: "/fo-bff/api/priv/v1/{storeIdentifier}/{locale}/doors"
     sessionUrl: "/fo-bff/admin/current-session"
     personificationUrl: "/fo-bff/api/priv/v1/{storeIdentifier}/{locale}/personification/customers"
     precart: "/fo-bff/api/priv/v1/{storeIdentifier}/{locale}/precart"
+    doors: "fo-bff/api/priv/v1/{storeIdentifier}/{locale}/doors"
+    usercontext: "/fo-bff/api/priv/v1/{storeIdentifier}/usercontext"
+    facets: "/fo-bff/api/priv/v1/{storeIdentifier}/{locale}/search/byFacets/*"
 search:
   baseUrl: "https://search.myluatlive.luxottica.com"
   endpoints:

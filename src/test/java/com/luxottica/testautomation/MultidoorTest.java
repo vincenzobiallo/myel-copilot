@@ -1,5 +1,7 @@
 package com.luxottica.testautomation;
 
+import com.luxottica.testautomation.components.bucket.BucketComponent;
+import com.luxottica.testautomation.components.bucket.dto.DataTestDTO;
 import com.luxottica.testautomation.configuration.Config;
 import com.luxottica.testautomation.constants.Constants;
 import com.luxottica.testautomation.dto.multidoor.*;
@@ -14,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -26,6 +29,10 @@ public abstract class MultidoorTest extends BaseTest {
         super.createContextAndPage(method);
 
         List<DoorDTO> selectedDoors = getSelectedDoors();
+        BucketComponent bucket = InjectionUtil.getBean(BucketComponent.class);
+
+        DataTestDTO data = bucket.getBucketData(method.getAnnotation(Test.class).testName());
+        String secondDoor = (String) data.getAdditionalData().get("secondDoor");
 
         if (selectedDoors.size() == 1) {
             logger.debug("Selecting two doors for user {}", Context.getUser().getUsername());
@@ -35,7 +42,9 @@ public abstract class MultidoorTest extends BaseTest {
             }
             boolean success = selectDoors(List.of(
                     MultidoorRequestDataDTO.builder().customer(availableDoors.get(0).getOrgentityName()).selected(true).build(),
-                    MultidoorRequestDataDTO.builder().customer(availableDoors.get(1).getOrgentityName()).selected(true).build()
+                    MultidoorRequestDataDTO.builder()
+                            .customer(availableDoors.stream().filter(a -> a.getOrgentityName().equals(secondDoor)).findFirst().orElse(availableDoors.get(1)).getOrgentityName())
+                            .selected(true).build()
             ));
 
             Assert.assertTrue(success, "Failed to select doors for user " + Context.getUser().getUsername());

@@ -99,7 +99,12 @@ public class HomepageTest extends BaseTest {
             var sortedDescriptions = descriptions.stream().sorted().toList();
 
             logger.trace("Verifying Brands Menu is ordered");
-            return descriptions.equals(sortedDescriptions) ? TestStatus.PASSED : TestStatus.PASSED_WITH_MINOR;
+            if (!descriptions.equals(sortedDescriptions)) {
+                Context.getTest().getStep(3).setNote("Brands are not ordered", logger);
+                return TestStatus.PASSED_WITH_MINOR;
+            }
+
+            return TestStatus.PASSED;
         });
     }
 
@@ -136,7 +141,7 @@ public class HomepageTest extends BaseTest {
 
             logger.trace("Verifying Categories Menu is ordered");
             if (!categories.equals(orderedCategories)) {
-                Context.getTest().getStep(3).setNote("Categories are not ordered");
+                Context.getTest().getStep(3).setNote("Categories are not ordered", logger);
                 return TestStatus.PASSED_WITH_MINOR;
             }
             return TestStatus.PASSED;
@@ -415,13 +420,13 @@ public class HomepageTest extends BaseTest {
             List<Locator> columns = page.locator("div[class^='ServicesMenu__Menu']").locator(">div").all();
             assertNotEquals(columns.size(), 0, "No columns found in Service Menu");
 
-            List<Locator> urls = columns.stream().flatMap(column -> column.locator("button").all().stream()).collect(Collectors.toList());
+            List<Locator> urls = columns.stream().flatMap(column -> column.locator("button").all().stream()).toList();
             List<String> LINK_MUST_CONTAIN = List.of(
                     "MainNav_Services_AFTERSALES_SECTION_Spareparts",
                     "MainNav_Services_AFTERSALES_SECTION_Warranty"
             );
 
-            List<String> links = urls.stream().map(url -> url.getAttribute("data-element-id")).collect(Collectors.toList());
+            List<String> links = urls.stream().map(url -> url.getAttribute("data-element-id")).toList();
             return links.containsAll(LINK_MUST_CONTAIN) ? TestStatus.PASSED : TestStatus.PASSED_WITH_MINOR;
         });
     }

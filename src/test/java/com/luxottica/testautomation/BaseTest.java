@@ -217,7 +217,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         logger.debug("Impersonificating user {}..", copilot.getDoor());
         Config config = InjectionUtil.getBean(Config.class);
 
-        String url = config.getBaseUrl().concat(config.getPersonificationUrl());
+        String url = config.getBaseUrl().concat(Constants.ENDPOINTS.PERSONIFICATION_URL);
         APIRequestContext context = RequestUtils.buildContext(Context.getPlaywright(), user.getUsername());
 
         String userToImpersonificate = copilot.getDoor().trim();
@@ -261,7 +261,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         if (Objects.isNull(user.getAttribute(Constants.USER_ATTRIBUTES.URL)) || user.getAttribute(Constants.USER_ATTRIBUTES.URL).isEmpty()){
 
             Config config = InjectionUtil.getBean(Config.class);
-            String url = config.getBaseUrl().concat(config.getSessionUrl());
+            String url = config.getBaseUrl().concat(Constants.ENDPOINTS.SESSION_URL);
 
             APIRequest.NewContextOptions options = new APIRequest.NewContextOptions();
             Map<String, String> extraHeaders = new HashMap<>();

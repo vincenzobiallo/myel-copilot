@@ -82,7 +82,8 @@ public class ReportComponentImpl implements ReportComponent {
         logger.info("{} test cases loaded!", tests.size());
     }
 
-    public void generateReport() {
+    @Override
+    public File generateReport() {
         // Genero un nome univoco per il report (e.g. Report_NRT_2024-05-06_<timestamp>.xlsx)
         LocalDateTime now = LocalDateTime.now();
         String reportName = "Report_NRT_" + now.toString().replace(":", "-").replace(".", "-") + ".xlsx";
@@ -135,6 +136,9 @@ public class ReportComponentImpl implements ReportComponent {
                 workbook.setForceFormulaRecalculation(true);
                 workbook.write(out);
             }
+
+            logger.info("Report generated successfully: {}", reportPath);
+            return report;
         } catch (IOException e) {
             logger.error("Error while generating report!", e);
             throw new RuntimeException("Error while generating report!", e);

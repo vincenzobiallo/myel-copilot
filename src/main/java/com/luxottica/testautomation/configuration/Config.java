@@ -12,18 +12,6 @@ public class Config {
 
     @Value("${myel.baseUrl}")
     private String baseUrl;
-    @Value("${myel.endpoints.sessionUrl}")
-    private String sessionUrl;
-    @Value("${myel.endpoints.personificationUrl}")
-    private String personificationUrl;
-    @Value("${myel.endpoints.precart}")
-    private String precart;
-    @Value("${myel.endpoints.doors}")
-    private String doors;
-    @Value("${myel.endpoints.usercontext}")
-    private String userContext;
-    @Value("${myel.endpoints.facets}")
-    private String facets;
 
     @Bean
     public static InjectionUtil injectionUtil() {

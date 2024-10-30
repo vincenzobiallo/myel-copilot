@@ -43,7 +43,7 @@ public class MultidoorTests extends MultidoorTest {
             logger.trace("Navigating to merged PLP page..");
 
             BFFResponse response = getBffClient().setRequest(
-                    config.getFacets()
+                    Constants.ENDPOINTS.FACETS
                             .replace(Constants.ENDPOINTS.STORE_IDENTIFIER, Context.getUser().getStore())
                             .replace(Constants.ENDPOINTS.LOCALE, Context.getUser().getLocale()),
                     HttpMethod.GET,
@@ -57,7 +57,7 @@ public class MultidoorTests extends MultidoorTest {
             for (int i = 0; i < selectedDoors.size(); i++) {
                 logger.trace("Selecting door {} of {}", i + 1, selectedDoors.size());
                 response = getBffClient().setRequest(
-                        config.getFacets()
+                        Constants.ENDPOINTS.FACETS
                                 .replace(Constants.ENDPOINTS.STORE_IDENTIFIER, Context.getUser().getStore())
                                 .replace(Constants.ENDPOINTS.LOCALE, Context.getUser().getLocale()),
                         HttpMethod.GET,

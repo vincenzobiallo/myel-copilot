@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.luxottica.testautomation.components.cart.dto.CartContentDTO;
 import com.luxottica.testautomation.components.cart.dto.CartDTO;
 import com.luxottica.testautomation.configuration.Config;
+import com.luxottica.testautomation.constants.Constants;
 import com.luxottica.testautomation.models.User;
 import com.luxottica.testautomation.utils.RequestUtils;
 import com.microsoft.playwright.APIRequestContext;
@@ -24,7 +25,7 @@ public class CartService {
     private Config config;
 
     public CartDTO getCart(Playwright playwright, User user) {
-        String url = config.getBaseUrl().concat(config.getPrecart());
+        String url = config.getBaseUrl().concat(Constants.ENDPOINTS.PRECART);
         APIRequestContext context = RequestUtils.buildContext(playwright, user.getUsername());
         url = url.replace("{storeIdentifier}", user.getStore()).replace("{locale}", user.getLocale());
 
@@ -55,7 +56,7 @@ public class CartService {
     }
 
     public void clearCart(Playwright playwright, User user) {
-        String url = config.getBaseUrl().concat(config.getPrecart());
+        String url = config.getBaseUrl().concat(Constants.ENDPOINTS.PRECART);
         APIRequestContext context = RequestUtils.buildContext(playwright, user.getUsername());
         url = url.replace("{storeIdentifier}", user.getStore()).replace("{locale}", user.getLocale());
 

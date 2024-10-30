@@ -65,9 +65,8 @@ public abstract class MultidoorTest extends BaseTest {
     }
 
     protected List<DoorDTO> getSelectedDoors() {
-        Config config = InjectionUtil.getBean(Config.class);
         BFFResponse bffResponse = getBffClient().setRequest(
-                config.getUserContext()
+                Constants.ENDPOINTS.USER_CONTEXT
                     .replace(Constants.ENDPOINTS.STORE_IDENTIFIER, getUser().getStore()),
                 HttpMethod.GET
                 );
@@ -83,7 +82,7 @@ public abstract class MultidoorTest extends BaseTest {
 
         Config config = InjectionUtil.getBean(Config.class);
         BFFResponse bffResponse = getBffClient().setRequest(
-                config.getDoors()
+                Constants.ENDPOINTS.DOORS
                     .replace(Constants.ENDPOINTS.STORE_IDENTIFIER, getUser().getStore())
                     .replace(Constants.ENDPOINTS.LOCALE, getUser().getLocale()),
                 HttpMethod.GET,
@@ -100,7 +99,7 @@ public abstract class MultidoorTest extends BaseTest {
     protected boolean selectDoors(List<MultidoorRequestDataDTO> selectedDoors) {
         Config config = InjectionUtil.getBean(Config.class);
         BFFResponse bffResponse = getBffClient().setRequest(
-                config.getDoors()
+                Constants.ENDPOINTS.DOORS
                         .replace(Constants.ENDPOINTS.STORE_IDENTIFIER, getUser().getStore())
                         .replace(Constants.ENDPOINTS.LOCALE, getUser().getLocale()),
                 HttpMethod.POST,

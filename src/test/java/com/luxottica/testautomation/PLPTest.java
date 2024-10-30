@@ -1,6 +1,5 @@
 package com.luxottica.testautomation;
 
-import com.luxottica.testautomation.annotations.Impersonificate;
 import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.utils.InjectionUtil;
@@ -10,8 +9,8 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 import static com.luxottica.testautomation.constants.Label.*;
+import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class PLPTest extends BaseTest {

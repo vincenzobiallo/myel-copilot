@@ -1,7 +1,6 @@
 package com.luxottica.testautomation.configuration;
 
 import com.luxottica.testautomation.utils.InjectionUtil;
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -9,18 +9,18 @@ import com.luxottica.testautomation.authentication.UserUtils;
 import com.luxottica.testautomation.components.bucket.BucketComponent;
 import com.luxottica.testautomation.components.bucket.dto.DataTestDTO;
 import com.luxottica.testautomation.components.report.ReportComponent;
+import com.luxottica.testautomation.components.report.enums.TestStatus;
+import com.luxottica.testautomation.components.report.models.TestCase;
+import com.luxottica.testautomation.components.report.models.TestStep;
 import com.luxottica.testautomation.components.report.models.TestStepFunction;
 import com.luxottica.testautomation.configuration.Config;
+import com.luxottica.testautomation.constants.Constants;
 import com.luxottica.testautomation.dto.CopilotDTO;
 import com.luxottica.testautomation.exceptions.BackOfficeUserException;
 import com.luxottica.testautomation.exceptions.MySkipException;
 import com.luxottica.testautomation.exceptions.UserAttributeException;
 import com.luxottica.testautomation.models.MyelStore;
 import com.luxottica.testautomation.models.User;
-import com.luxottica.testautomation.components.report.enums.TestStatus;
-import com.luxottica.testautomation.components.report.models.TestCase;
-import com.luxottica.testautomation.components.report.models.TestStep;
-import com.luxottica.testautomation.constants.Constants;
 import com.luxottica.testautomation.security.BFFClient;
 import com.luxottica.testautomation.security.Context;
 import com.luxottica.testautomation.utils.InjectionUtil;
@@ -86,7 +86,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
             TestStep firstStep = report.getTests().get(getBusinessTestId(test)).getStep(1);
             firstStep.setNote("Error while authenticating user: " + pilot.getDoor(), logger);
             firstStep.setStatus(TestStatus.FAILED);
-            throw new RuntimeException(e);
+            throw new AssertionError("Error while authenticating user: " + pilot.getDoor(), e);
         }
 
         this.user = Context.getUser();

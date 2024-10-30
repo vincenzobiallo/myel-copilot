@@ -8,11 +8,12 @@ import com.luxottica.testautomation.utils.PlaywrightTestUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.apache.logging.log4j.util.Strings;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,8 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.luxottica.testautomation.utils.ExcelUtils.*;
 import static com.luxottica.testautomation.components.report.enums.ReportColumn.*;
+import static com.luxottica.testautomation.utils.ExcelUtils.*;
 
 public class ReportComponentImpl implements ReportComponent {
 

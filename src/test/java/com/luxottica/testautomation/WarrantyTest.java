@@ -1,10 +1,8 @@
 package com.luxottica.testautomation;
 
-import com.luxottica.testautomation.annotations.Impersonificate;
 import com.luxottica.testautomation.components.labels.LabelComponent;
-import com.luxottica.testautomation.components.labels.LabelComponentImpl;
-import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
+import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.exceptions.MySkipException;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;

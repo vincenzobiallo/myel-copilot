@@ -1,7 +1,6 @@
 package com.luxottica.testautomation;
 
 import com.google.gson.JsonParser;
-import com.luxottica.testautomation.annotations.Impersonificate;
 import com.luxottica.testautomation.components.cart.CartService;
 import com.luxottica.testautomation.components.cart.dto.CartDTO;
 import com.luxottica.testautomation.components.report.enums.TestStatus;

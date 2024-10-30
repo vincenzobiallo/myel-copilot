@@ -1,6 +1,5 @@
 package com.luxottica.testautomation.components.bucket;
 
-import com.luxottica.testautomation.components.bucket.dto.DataDTO;
 import com.luxottica.testautomation.components.bucket.dto.DataTestDTO;
 
 public interface BucketComponent {

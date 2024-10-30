@@ -4,7 +4,6 @@ import com.luxottica.testautomation.components.report.enums.TestStatus;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Data
 public class TestStep implements Comparable<TestStep> {

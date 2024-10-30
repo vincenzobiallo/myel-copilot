@@ -3,29 +3,19 @@ package com.luxottica.testautomation.components.bucket;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luxottica.testautomation.components.bucket.dto.DataDTO;
 import com.luxottica.testautomation.components.bucket.dto.DataTestDTO;
-import com.luxottica.testautomation.components.bucket.enums.StoresColumn;
 import com.luxottica.testautomation.components.report.enums.ReportType;
 import com.luxottica.testautomation.models.MyelStore;
 import com.luxottica.testautomation.utils.PlaywrightTestUtils;
 import jakarta.annotation.PostConstruct;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static com.luxottica.testautomation.utils.ExcelUtils.*;
-import static com.luxottica.testautomation.components.bucket.enums.BucketColumn.*;
 
 public class BucketComponentImpl implements BucketComponent {
 

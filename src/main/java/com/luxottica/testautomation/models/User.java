@@ -1,17 +1,11 @@
 package com.luxottica.testautomation.models;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.luxottica.testautomation.annotations.Impersonificate;
 import com.luxottica.testautomation.authentication.PlaywrightFactory;
-import com.luxottica.testautomation.configuration.Config;
-import com.luxottica.testautomation.exceptions.BackOfficeUserException;
 import com.luxottica.testautomation.constants.Constants;
-import com.luxottica.testautomation.utils.InjectionUtil;
-import com.luxottica.testautomation.utils.PlaywrightTestUtils;
-import com.luxottica.testautomation.utils.RequestUtils;
-import com.microsoft.playwright.*;
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import lombok.*;

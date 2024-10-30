@@ -2,7 +2,6 @@ package com.luxottica.testautomation;
 
 import com.luxottica.testautomation.components.labels.LabelComponent;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
-
 import com.luxottica.testautomation.configuration.Config;
 import com.luxottica.testautomation.constants.Constants;
 import com.luxottica.testautomation.dto.multidoor.DoorDTO;

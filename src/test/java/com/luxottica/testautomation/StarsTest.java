@@ -14,7 +14,6 @@ import com.microsoft.playwright.options.LoadState;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;

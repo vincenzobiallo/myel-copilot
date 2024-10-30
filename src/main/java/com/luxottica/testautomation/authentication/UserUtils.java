@@ -5,7 +5,7 @@ import com.luxottica.testautomation.exceptions.BackOfficeUserException;
 import com.luxottica.testautomation.exceptions.UserException;
 import com.luxottica.testautomation.models.User;
 import com.luxottica.testautomation.utils.InjectionUtil;
-import com.microsoft.playwright.*;
+import com.microsoft.playwright.Browser;
 
 import java.io.BufferedReader;
 import java.io.File;

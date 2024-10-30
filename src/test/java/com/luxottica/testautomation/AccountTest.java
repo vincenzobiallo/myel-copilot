@@ -10,7 +10,6 @@ import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Response;
 import com.microsoft.playwright.options.LoadState;
-import org.assertj.core.util.Files;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Test;
 
@@ -18,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.util.Base64;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,7 +24,8 @@ import java.util.regex.Pattern;
 
 import static com.luxottica.testautomation.constants.Label.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
-import static org.testng.AssertJUnit.*;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 
 public class AccountTest extends BaseTest {
 
@@ -211,9 +210,9 @@ public class AccountTest extends BaseTest {
             Locator progressRefresh = page.locator("div[class='progress-container']").locator("svg").first();
 
             logger.trace("Waiting for the upload to finish");
-            int MAX_SECONDS = 60;
+            int MAX_ITERATE = 60;
             int currentProgress = 0;
-            for (int i = 0; i < MAX_SECONDS; i++) {
+            for (int i = 0; i < MAX_ITERATE; i++) {
 
                 if (currentProgress == 100) {
                     break;
@@ -236,7 +235,7 @@ public class AccountTest extends BaseTest {
             }
 
             if (currentProgress != 100) {
-                Context.getTest().getStep(2).setNote("Upload did not finish in " + MAX_SECONDS + " seconds", logger);
+                Context.getTest().getStep(2).setNote("Upload did not finish in " + MAX_ITERATE + " check", logger);
                 Context.getTest().setFailed(true);
                 return TestStatus.TO_BE_RETESTED;
             }

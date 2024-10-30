@@ -1,8 +1,8 @@
 package com.luxottica.testautomation;
 
 import com.luxottica.testautomation.components.labels.LabelComponent;
-import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.components.report.enums.TestStatus;
+import com.luxottica.testautomation.constants.Errors;
 import com.luxottica.testautomation.exceptions.MySkipException;
 import com.luxottica.testautomation.models.RXPrescriptionAttribute;
 import com.luxottica.testautomation.utils.InjectionUtil;
@@ -18,7 +18,8 @@ import java.util.Optional;
 
 import static com.luxottica.testautomation.constants.Label.*;
 import static com.luxottica.testautomation.extensions.MyPlaywrightAssertions.assertThat;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class RXTest extends BaseTest {
 

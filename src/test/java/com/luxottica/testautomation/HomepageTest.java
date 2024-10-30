@@ -1,9 +1,9 @@
 package com.luxottica.testautomation;
 
 import com.luxottica.testautomation.components.labels.LabelComponent;
+import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.constants.Constants;
 import com.luxottica.testautomation.constants.Errors;
-import com.luxottica.testautomation.components.report.enums.TestStatus;
 import com.luxottica.testautomation.security.Context;
 import com.luxottica.testautomation.utils.InjectionUtil;
 import com.microsoft.playwright.Locator;
@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.luxottica.testautomation.constants.Label.COOKIE_POLICY_BANNER_MESSAGE;
 import static com.luxottica.testautomation.constants.Label.SEARCH_SORRY_NO_RESULTS;

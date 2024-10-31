@@ -21,10 +21,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -40,6 +38,10 @@ public class SendgridService {
     private String fromName;
     @Value("${sendgrid.from.email}")
     private String fromEmail;
+    @Value("${sendgrid.to.name}")
+    private String toName;
+    @Value("${sendgrid.to.email}")
+    private String toEmail;
 
     @Value("${sendgrid.subject}")
     private String subject;
@@ -61,7 +63,11 @@ public class SendgridService {
                 files.addAll(List.of(attachments));
             }
 
-            File zipFile = zipFiles(files.toArray(new File[0]));
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmm");
+            String finalZipName = zipName.replace("{datetime}", sdf.format(date));
+
+            File zipFile = zipFiles(finalZipName, files.toArray(new File[0]));
 
             byte[] data = null;
             try {
@@ -73,7 +79,7 @@ public class SendgridService {
             Attachments attachments3 = new Attachments();
             String dataString = Base64.getEncoder().encodeToString(data);
             attachments3.setContent(dataString);
-            attachments3.setFilename(zipName);
+            attachments3.setFilename(finalZipName);
             attachments3.setType("application/zip");
             attachments3.setDisposition("attachment");
             attachments3.setContentId("report");
@@ -100,13 +106,11 @@ public class SendgridService {
         }
     }
 
-    private File zipFiles(File[] files) {
+    private File zipFiles(String zipName, File[] files) {
 
         logger.debug("Zipping {} files..", files.length);
 
-        LocalDate date = LocalDate.now();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmm");
-        File zipFile = new File(zipName.replace("{datetime}", sdf.format(date)) + ".zip");
+        File zipFile = new File(zipName);
 
         try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile))) {
             for (File file : files) {
@@ -131,19 +135,14 @@ public class SendgridService {
 
     private Mail craftMail() {
 
-        Email from = new Email();
-        from.setName(fromName);
-        from.setEmail(this.fromEmail);
-
-        Email to = new Email();
-        to.setName("MyEL DEV");
-        to.setEmail("b2b40.dev@gmail.com");
+        Email from = new Email(fromEmail, fromName);
+        Email to = new Email(toEmail, toName);
 
         Mail mail = new Mail();
         mail.setFrom(from);
-        mail.setSubject(subject);
 
         Personalization personalization = new Personalization();
+        personalization.addDynamicTemplateData("subject", subject);
         personalization.addTo(to);
         mail.addPersonalization(personalization);
         mail.setTemplateId(templateId);

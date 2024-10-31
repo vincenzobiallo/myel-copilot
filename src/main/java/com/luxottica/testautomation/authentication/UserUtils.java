@@ -25,23 +25,41 @@ public class UserUtils {
     private static final List<User> users = new LinkedList<>();
     private static final List<User> backOfficeUsers = new LinkedList<>();
 
-    static { // TODO - Dynamically load users from a file
-        File file = new File("users.csv");
-        users.add(new User("user.0001026276.it", "Luxottic@B2B789!!"));
+    private static final String FILE_PLACEHOLDER = "playwright/.auth/users.csv";
+
+    static {
+        File file = new File(FILE_PLACEHOLDER);
+
+        // user or subusers have following pattern <name>.<number>.<store slug>
+        Pattern pattern = Pattern.compile("[A-Za-z0-9]+\\.[0-9]+\\.[a-z]+");
+
+
         if (file.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    String[] values = line.split(";");
+                    String[] values = line.split("\t");
+
+                    String username = values[0];
+                    String password = values[1];
+
                     User user = new User();
-                    user.setUsername(values[0]);
-                    user.setPassword(values[1]);
-                    user.setBackOfficeUser(true);
-                    backOfficeUsers.add(user);
+                    user.setUsername(username);
+                    user.setPassword(password);
+
+                    if (pattern.matcher(username).matches()) {
+                        user.setBackOfficeUser(false);
+                        users.add(user);
+                    } else {
+                        user.setBackOfficeUser(true);
+                        backOfficeUsers.add(user);
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            throw new RuntimeException("users.csv file not found!");
         }
     }
 

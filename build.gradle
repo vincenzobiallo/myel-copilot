@@ -56,7 +56,6 @@ test {
 		)
 
 		dependsOn 'cleanTest'
-		dependsOn 'build'
 		suites 'src/test/resources/testng.xml'
 	}
 }

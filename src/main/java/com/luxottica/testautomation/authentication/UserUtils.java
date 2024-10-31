@@ -33,12 +33,11 @@ public class UserUtils {
         // user or subusers have following pattern <name>.<number>.<store slug>
         Pattern pattern = Pattern.compile("[A-Za-z0-9]+\\.[0-9]+\\.[a-z]+");
 
-
         if (file.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    String[] values = line.split("\t");
+                    String[] values = line.split("\\|");
 
                     String username = values[0];
                     String password = values[1];

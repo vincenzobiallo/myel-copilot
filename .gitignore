@@ -37,7 +37,7 @@ out/
 .vscode/
 
 ### Luxottica ###
-users.csv
+playwright/.auth/users.csv
 playwright/.auth
 playwright/report/results
 screenshots/
